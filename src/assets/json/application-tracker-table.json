@@ -1,0 +1,122 @@
+[
+    {
+      "date": "2023-09-01",
+      "department": "HR",
+      "action_by": "John Doe",
+      "action": "Hired new employees"
+    },
+    {
+      "date": "2023-09-02",
+      "department": "Sales",
+      "action_by": "Alice Smith",
+      "action": "Closed a sales deal"
+    },
+    {
+      "date": "2023-09-03",
+      "department": "IT",
+      "action_by": "Bob Johnson",
+      "action": "Resolved a technical issue"
+    },
+    {
+      "date": "2023-09-04",
+      "department": "Marketing",
+      "action_by": "Eva Wilson",
+      "action": "Launched a marketing campaign"
+    },
+    {
+      "date": "2023-09-05",
+      "department": "Finance",
+      "action_by": "David Brown",
+      "action": "Approved financial reports"
+    },
+    {
+      "date": "2023-09-06",
+      "department": "Operations",
+      "action_by": "Linda Davis",
+      "action": "Optimized operational processes"
+    },
+    {
+      "date": "2023-09-07",
+      "department": "Customer Support",
+      "action_by": "Sophia Lee",
+      "action": "Assisted customers"
+    },
+    {
+      "date": "2023-09-08",
+      "department": "Research & Development",
+      "action_by": "Michael Wilson",
+      "action": "Innovated new product features"
+    },
+    {
+      "date": "2023-09-09",
+      "department": "Quality Assurance",
+      "action_by": "Emily Johnson",
+      "action": "Performed quality testing"
+    },
+    {
+      "date": "2023-09-10",
+      "department": "Legal",
+      "action_by": "William Smith",
+      "action": "Reviewed legal documents"
+    },
+    {
+      "date": "2023-09-11",
+      "department": "HR",
+      "action_by": "Olivia Brown",
+      "action": "Conducted employee training"
+    },
+    {
+      "date": "2023-09-12",
+      "department": "Sales",
+      "action_by": "Daniel Wilson",
+      "action": "Generated sales leads"
+    },
+    {
+      "date": "2023-09-13",
+      "department": "IT",
+      "action_by": "Sophia Lee",
+      "action": "Deployed software updates"
+    },
+    {
+      "date": "2023-09-14",
+      "department": "Marketing",
+      "action_by": "Eva Wilson",
+      "action": "Designed promotional materials"
+    },
+    {
+      "date": "2023-09-15",
+      "department": "Finance",
+      "action_by": "John Doe",
+      "action": "Processed financial transactions"
+    },
+    {
+      "date": "2023-09-16",
+      "department": "Operations",
+      "action_by": "Alice Smith",
+      "action": "Managed supply chain"
+    },
+    {
+      "date": "2023-09-17",
+      "department": "Customer Support",
+      "action_by": "Bob Johnson",
+      "action": "Provided customer assistance"
+    },
+    {
+      "date": "2023-09-18",
+      "department": "Research & Development",
+      "action_by": "David Brown",
+      "action": "Conducted research"
+    },
+    {
+      "date": "2023-09-19",
+      "department": "Quality Assurance",
+      "action_by": "Linda Davis",
+      "action": "Ensured product quality"
+    },
+    {
+      "date": "2023-09-20",
+      "department": "Legal",
+      "action_by": "Sophia Lee",
+      "action": "Drafted legal agreements"
+    }
+  ]

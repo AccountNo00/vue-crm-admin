@@ -1,0 +1,162 @@
+[
+  {
+    "type": "License",
+    "approved_by": "John Doe",
+    "approved_date": "2023-09-25",
+    "remarks": "Approved for business operation.",
+    "business_name": "ABC Corporation",
+    "address": "123 Main Street, Anytown, USA"
+  },
+  {
+    "type": "Permit",
+    "approved_by": "Jane Smith",
+    "approved_date": "2023-09-24",
+    "remarks": "Permit granted for construction.",
+    "business_name": "XYZ Builders",
+    "address": "456 Elm Avenue, Cityville, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "Michael Johnson",
+    "approved_date": "2023-09-23",
+    "remarks": "Renewed business license.",
+    "business_name": "123 Enterprises",
+    "address": "789 Oak Road, Villagetown, USA"
+  },
+  {
+    "type": "Registration",
+    "approved_by": "Emily Brown",
+    "approved_date": "2023-09-22",
+    "remarks": "New business registration.",
+    "business_name": "Sunshine Café",
+    "address": "101 Palm Street, Beach City, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "David Wilson",
+    "approved_date": "2023-09-21",
+    "remarks": "License extension granted.",
+    "business_name": "Tech Innovators Inc.",
+    "address": "555 Silicon Drive, Techville, USA"
+  },
+  {
+    "type": "Permit",
+    "approved_by": "Sarah Turner",
+    "approved_date": "2023-09-20",
+    "remarks": "Construction permit issued.",
+    "business_name": "Green Builders Co.",
+    "address": "777 Maple Lane, Greentown, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "Daniel White",
+    "approved_date": "2023-09-19",
+    "remarks": "License renewal processed.",
+    "business_name": "ABC Widgets LLC",
+    "address": "999 Pine Street, Widgetville, USA"
+  },
+  {
+    "type": "Registration",
+    "approved_by": "Olivia Parker",
+    "approved_date": "2023-09-18",
+    "remarks": "New business registration approved.",
+    "business_name": "Fresh Eats Grocery",
+    "address": "321 Market Avenue, Freshville, USA"
+  },
+  {
+    "type": "Permit",
+    "approved_by": "James Garcia",
+    "approved_date": "2023-09-17",
+    "remarks": "Construction permit granted.",
+    "business_name": "BuildIt Right Inc.",
+    "address": "456 Construction Road, Buildertown, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "Sophia Lee",
+    "approved_date": "2023-09-16",
+    "remarks": "License renewed successfully.",
+    "business_name": "Tech Solutions Co.",
+    "address": "777 Innovation Boulevard, Techville, USA"
+  },
+  {
+    "type": "Registration",
+    "approved_by": "William Hall",
+    "approved_date": "2023-09-15",
+    "remarks": "Business registration approved.",
+    "business_name": "Café Morningside",
+    "address": "101 Sunrise Avenue, Townsville, USA"
+  },
+  {
+    "type": "Permit",
+    "approved_by": "Ella Martinez",
+    "approved_date": "2023-09-14",
+    "remarks": "Construction permit issued.",
+    "business_name": "ConstructIt All Inc.",
+    "address": "555 Blueprint Road, Constructionville, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "Liam Adams",
+    "approved_date": "2023-09-13",
+    "remarks": "License extension granted.",
+    "business_name": "Global Services Ltd.",
+    "address": "999 Corporate Avenue, Global City, USA"
+  },
+  {
+    "type": "Registration",
+    "approved_by": "Ava Hernandez",
+    "approved_date": "2023-09-12",
+    "remarks": "New business registration approved.",
+    "business_name": "Nature's Harvest Farm",
+    "address": "123 Farm Road, Countryside, USA"
+  },
+  {
+    "type": "Permit",
+    "approved_by": "Noah Taylor",
+    "approved_date": "2023-09-11",
+    "remarks": "Construction permit granted.",
+    "business_name": "BuildIt Fast Construction",
+    "address": "456 Quick Street, Buildtown, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "Mia Scott",
+    "approved_date": "2023-09-10",
+    "remarks": "License renewed successfully.",
+    "business_name": "Innovate Tech Solutions",
+    "address": "777 Tech Park Avenue, Innovation City, USA"
+  },
+  {
+    "type": "Registration",
+    "approved_by": "Ethan Baker",
+    "approved_date": "2023-09-09",
+    "remarks": "Business registration approved.",
+    "business_name": "Healthy Bites Café",
+    "address": "101 Wellness Lane, Healthville, USA"
+  },
+  {
+    "type": "Permit",
+    "approved_by": "Emma Turner",
+    "approved_date": "2023-09-08",
+    "remarks": "Construction permit issued.",
+    "business_name": "BuildIt Better Inc.",
+    "address": "555 Upgrade Road, Constructionville, USA"
+  },
+  {
+    "type": "License",
+    "approved_by": "Liam Parker",
+    "approved_date": "2023-09-07",
+    "remarks": "License extension granted.",
+    "business_name": "Tech Innovations Co.",
+    "address": "999 Tech Drive, Innovatetown, USA"
+  },
+  {
+    "type": "Registration",
+    "approved_by": "Ava Garcia",
+    "approved_date": "2023-09-06",
+    "remarks": "New business registration approved.",
+    "business_name": "Sunset Grill",
+    "address": "123 Sunset Road, Beachville, USA"
+  }
+]

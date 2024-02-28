@@ -1,0 +1,122 @@
+[
+  {
+    "date": "2023-09-06 10:00 AM",
+    "username": "user1",
+    "department": "Marketing",
+    "description": "Scheduled marketing meeting"
+  },
+  {
+    "date": "2023-09-06 11:30 AM",
+    "username": "user2",
+    "department": "Finance",
+    "description": "Budget review"
+  },
+  {
+    "date": "2023-09-06 1:15 PM",
+    "username": "user3",
+    "department": "HR",
+    "description": "New employee orientation"
+  },
+  {
+    "date": "2023-09-07 9:45 AM",
+    "username": "user4",
+    "department": "Sales",
+    "description": "Sales presentation"
+  },
+  {
+    "date": "2023-09-07 2:30 PM",
+    "username": "user5",
+    "department": "Engineering",
+    "description": "Product development meeting"
+  },
+  {
+    "date": "2023-09-08 8:20 AM",
+    "username": "user6",
+    "department": "Marketing",
+    "description": "Advertising campaign planning"
+  },
+  {
+    "date": "2023-09-08 3:45 PM",
+    "username": "user7",
+    "department": "Finance",
+    "description": "Financial report preparation"
+  },
+  {
+    "date": "2023-09-09 10:30 AM",
+    "username": "user8",
+    "department": "HR",
+    "description": "Employee performance reviews"
+  },
+  {
+    "date": "2023-09-09 4:15 PM",
+    "username": "user9",
+    "department": "Sales",
+    "description": "Client meeting"
+  },
+  {
+    "date": "2023-09-10 9:00 AM",
+    "username": "user10",
+    "department": "Engineering",
+    "description": "Software development sprint"
+  },
+  {
+    "date": "2023-09-10 5:30 PM",
+    "username": "user11",
+    "department": "Marketing",
+    "description": "Product launch event"
+  },
+  {
+    "date": "2023-09-11 11:45 AM",
+    "username": "user12",
+    "department": "Finance",
+    "description": "Budget planning"
+  },
+  {
+    "date": "2023-09-11 6:15 PM",
+    "username": "user13",
+    "department": "HR",
+    "description": "HR policy review"
+  },
+  {
+    "date": "2023-09-12 10:15 AM",
+    "username": "user14",
+    "department": "Sales",
+    "description": "Sales training workshop"
+  },
+  {
+    "date": "2023-09-12 7:00 PM",
+    "username": "user15",
+    "department": "Engineering",
+    "description": "Code review session"
+  },
+  {
+    "date": "2023-09-13 8:45 AM",
+    "username": "user16",
+    "department": "Marketing",
+    "description": "Marketing campaign analysis"
+  },
+  {
+    "date": "2023-09-13 7:30 PM",
+    "username": "user17",
+    "department": "Finance",
+    "description": "Financial forecasting"
+  },
+  {
+    "date": "2023-09-14 9:30 AM",
+    "username": "user18",
+    "department": "HR",
+    "description": "Benefits enrollment"
+  },
+  {
+    "date": "2023-09-14 8:15 PM",
+    "username": "user19",
+    "department": "Sales",
+    "description": "Client negotiations"
+  },
+  {
+    "date": "2023-09-15 1:30 PM",
+    "username": "user20",
+    "department": "Engineering",
+    "description": "Project kickoff meeting"
+  }
+]

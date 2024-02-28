@@ -1,0 +1,74 @@
+[
+    {
+        "ref_no": "OCBS-10002342",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 0
+    },
+    {
+        "ref_no": "OCBS-10005242",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 0
+    },
+    {
+        "ref_no": "OCBS-10001122",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 0
+    },
+    {
+        "ref_no": "OCBS-10005242",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 0
+    },
+    {
+        "ref_no": "OCBS-100042522",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 0
+    },
+    {
+        "ref_no": "ARENA-100042522",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 1
+    },
+    {
+        "ref_no": "ARENA-100042522",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 1
+    },
+    {
+        "ref_no": "ARENA-100042522",
+        "business_name": "ocbssample",
+        "guarantor": "guarantorsample",
+        "status": "ACTIVATED",
+        "business_address": "sampleaddress",
+        "contact_person": "samplecontact",
+        "is_arena": 1
+    }
+]

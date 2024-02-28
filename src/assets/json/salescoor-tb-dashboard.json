@@ -1,0 +1,12 @@
+[
+    { "region": "North", "province": "Ontario", "activated": 1, "fit": 1 ,"lead": 2, "denied": 0, "cancelled": 0 },
+    { "region": "South", "province": "California", "activated": 2, "fit": 0 ,"lead": 1, "denied": 3, "cancelled": 0 },
+    { "region": "East", "province": "New York", "activated": 3, "fit": 0 ,"lead": 0, "denied": 1, "cancelled": 0 },
+    { "region": "West", "province": "California", "activated": 4, "fit": 0 ,"lead": 1, "denied": 0, "cancelled": 0 },
+    { "region": "Midwest", "province": "Illinois", "activated": 1, "fit": 1 ,"lead": 1, "denied": 0, "cancelled": 0 },
+    { "region": "South", "province": "Texas", "activated": 2, "fit": 0 ,"lead": 2, "denied": 0, "cancelled": 0 },
+    { "region": "North", "province": "Minnesota", "activated": 3, "fit": 1 ,"lead": 0, "denied": 0, "cancelled": 0 },
+    { "region": "West", "province": "Oregon", "activated": 4, "fit": 0 ,"lead": 0, "denied": 0, "cancelled": 0 },
+    { "region": "East", "province": "Florida", "activated": 1, "fit": 1 ,"lead": 0, "denied": 0, "cancelled": 0 },
+    { "region": "Midwest", "province": "Michigan", "activated": 2 ,"fit": 0 ,"lead": 2, "denied": 3, "cancelled": 0 }
+  ]

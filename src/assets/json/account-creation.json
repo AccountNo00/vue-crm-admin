@@ -1,0 +1,142 @@
+[
+    {
+      "fullname": "John Doe",
+      "username": "johndoe123",
+      "department": "Marketing",
+      "position": "Marketing Manager",
+      "email": "john.doe@example.com"
+    },
+    {
+      "fullname": "Alice Smith",
+      "username": "alicesmith456",
+      "department": "Finance",
+      "position": "Financial Analyst",
+      "email": "alice.smith@example.com"
+    },
+    {
+      "fullname": "Bob Johnson",
+      "username": "bob.johnson",
+      "department": "Human Resources",
+      "position": "HR Specialist",
+      "email": "bob.johnson@example.com"
+    },
+    {
+      "fullname": "Emily Wilson",
+      "username": "emilywilson789",
+      "department": "Sales",
+      "position": "Sales Representative",
+      "email": "emily.wilson@example.com"
+    },
+    {
+      "fullname": "Michael Brown",
+      "username": "michaelbrown321",
+      "department": "Engineering",
+      "position": "Software Engineer",
+      "email": "michael.brown@example.com"
+    },
+    {
+      "fullname": "Samantha Davis",
+      "username": "samantha.davis",
+      "department": "Marketing",
+      "position": "Marketing Coordinator",
+      "email": "samantha.davis@example.com"
+    },
+    {
+      "fullname": "Robert Lee",
+      "username": "robertlee567",
+      "department": "Finance",
+      "position": "Financial Manager",
+      "email": "robert.lee@example.com"
+    },
+    {
+      "fullname": "Laura Miller",
+      "username": "laura.miller",
+      "department": "Human Resources",
+      "position": "HR Manager",
+      "email": "laura.miller@example.com"
+    },
+    {
+      "fullname": "Daniel Clark",
+      "username": "danielclark234",
+      "department": "Sales",
+      "position": "Sales Manager",
+      "email": "daniel.clark@example.com"
+    },
+    {
+      "fullname": "Olivia White",
+      "username": "oliviawhite789",
+      "department": "Engineering",
+      "position": "Senior Software Engineer",
+      "email": "olivia.white@example.com"
+    },
+    {
+      "fullname": "Ethan Hall",
+      "username": "ethanhall123",
+      "department": "Marketing",
+      "position": "Marketing Assistant",
+      "email": "ethan.hall@example.com"
+    },
+    {
+      "fullname": "Ava Turner",
+      "username": "avaturner456",
+      "department": "Finance",
+      "position": "Financial Analyst",
+      "email": "ava.turner@example.com"
+    },
+    {
+      "fullname": "James Brown",
+      "username": "jamesbrown789",
+      "department": "Human Resources",
+      "position": "HR Coordinator",
+      "email": "james.brown@example.com"
+    },
+    {
+      "fullname": "Sophia Harris",
+      "username": "sophiaharris123",
+      "department": "Sales",
+      "position": "Sales Representative",
+      "email": "sophia.harris@example.com"
+    },
+    {
+      "fullname": "William Jackson",
+      "username": "williamjackson456",
+      "department": "Engineering",
+      "position": "Software Engineer",
+      "email": "william.jackson@example.com"
+    },
+    {
+      "fullname": "Charlotte Smith",
+      "username": "charlottesmith789",
+      "department": "Marketing",
+      "position": "Marketing Manager",
+      "email": "charlotte.smith@example.com"
+    },
+    {
+      "fullname": "Liam Davis",
+      "username": "liamdavis123",
+      "department": "Finance",
+      "position": "Financial Manager",
+      "email": "liam.davis@example.com"
+    },
+    {
+      "fullname": "Emma Taylor",
+      "username": "emmataylor456",
+      "department": "Human Resources",
+      "position": "HR Specialist",
+      "email": "emma.taylor@example.com"
+    },
+    {
+      "fullname": "Noah Anderson",
+      "username": "noahanderson789",
+      "department": "Sales",
+      "position": "Sales Manager",
+      "email": "noah.anderson@example.com"
+    },
+    {
+      "fullname": "Isabella Martinez",
+      "username": "isabellamartinez123",
+      "department": "Engineering",
+      "position": "Senior Software Engineer",
+      "email": "isabella.martinez@example.com"
+    }
+]
