@@ -795,4 +795,46 @@ export default [
     meta: { authRequired: true },
     component: () => import("./views/_sales-coor/ocbs-list-view"),
   },
+  {
+    path: "/arena-list",
+    name: "arena-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-coor/arena-list"),
+  },
+  {
+    path: "/cband/dashboard",
+    name: "cband-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_cband/dashboard"),
+  },
+  {
+    path: "/cband/report",
+    name: "cband-report",
+    meta: { authRequired: true },
+    component: () => import("./views/_cband/report"),
+  },
+  {
+    path: "/cband/price-list",
+    name: "cband-price-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_cband/price-list"),
+  },
+  {
+    path: "/pc-supplier/dashboard",
+    name: "pc-supplier-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_pc-supplier/dashboard"),
+  },
+  {
+    path: "/pc-supplier/report",
+    name: "pc-supplier-report",
+    meta: { authRequired: true },
+    component: () => import("./views/_pc-supplier/report"),
+  },
+  {
+    path: "/pc-supplier/price-list",
+    name: "pc-supplier-price-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_pc-supplier/price-list"),
+  },
 ];

@@ -924,7 +924,7 @@ export const menuItems = [
         id: 1,
         label: "ARENA LIST",
         icon: "bx bx-circle",
-        link: "/sales-coor-dashboard"
+        link: "/arena-list"
     },
     // CBAND
     {
@@ -936,18 +936,42 @@ export const menuItems = [
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/sales-coor-dashboard"
+        link: "/cband/dashboard"
     },
     {
         id: 1,
         label: "REPORT",
         icon: "bx bx-circle",
-        link: "/sales-coor-dashboard"
+        link: "/cband/report"
     },
     {
         id: 1,
         label: "PRICE LIST",
         icon: "bx bx-circle",
-        link: "/sales-coor-dashboard"
+        link: "/cband/price-list"
+    },
+    // PC SUPPLIER
+    {
+        id:1,
+        label:"PC SUPPLIER",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "Dashboard",
+        icon: "bx bxs-dashboard",
+        link: "/pc-supplier/dashboard"
+    },
+    {
+        id: 1,
+        label: "REPORT",
+        icon: "bx bx-circle",
+        link: "/pc-supplier/report"
+    },
+    {
+        id: 1,
+        label: "PRICE LIST",
+        icon: "bx bx-circle",
+        link: "/pc-supplier/price-list"
     },
 ];
