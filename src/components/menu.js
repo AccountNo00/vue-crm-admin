@@ -993,4 +993,54 @@ export const menuItems = [
         icon: "bx bx-circle",
         link: "/account-creation/report"
     },
+    // TRAINOR
+    
+    {
+        id:1,
+        label:"TRAINOR",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "Dashboard",
+        icon: "bx bxs-dashboard",
+        link: "/trainor/dashboard"
+    },
+    {
+        id: 1,
+        label: "REPORT",
+        icon: "bx bx-circle",
+        link: "/trainor/report"
+    },
+    {
+        id: 1,
+        label: "TRAINING LIST",
+        icon: "bx bx-circle",
+        link: "/trainor/training-list"
+    },
+    // SIM
+    
+    {
+        id:1,
+        label:"SIM",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "Dashboard",
+        icon: "bx bxs-dashboard",
+        link: "/sim/dashboard"
+    },
+    {
+        id: 1,
+        label: "REPORT",
+        icon: "bx bx-circle",
+        link: "/sim/report"
+    },
+    {
+        id: 1,
+        label: "PRICE LIST",
+        icon: "bx bx-circle",
+        link: "/sim/price-list"
+    },
 ];

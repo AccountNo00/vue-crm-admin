@@ -849,4 +849,41 @@ export default [
     meta: { authRequired: true },
     component: () => import("./views/_account-creation/dashboard"),
   },
+  {
+    path: "/trainor/dashboard",
+    name: "trainor-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_trainor/dashboard"),
+  },
+  {
+    path: "/trainor/report",
+    name: "trainor-report",
+    meta: { authRequired: true },
+    component: () => import("./views/_trainor/report"),
+  },
+  {
+    path: "/trainor/training-list",
+    name: "trainor-training-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_trainor/training-list"),
+  },
+  
+  {
+    path: "/sim/dashboard",
+    name: "sim-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_sim/dashboard"),
+  },
+  {
+    path: "/sim/report",
+    name: "sim-report",
+    meta: { authRequired: true },
+    component: () => import("./views/_sim/report"),
+  },
+  {
+    path: "/sim/price-list",
+    name: "sim-price-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_sim/price-list"),
+  },
 ];
