@@ -7,7 +7,7 @@ export default [
     meta: {
       authRequired: true,
     },
-    component: () => import("./views/_dashboard/list"),
+    component: () => import("./views/_superadmin/dashboard"),
   },
   {
     path: "/login",
@@ -721,43 +721,43 @@ export default [
     path: "/account-creation",
     name: "account-creation",
     meta: { authRequired: true },
-    component: () => import("./views/_account-creation/list"),
+    component: () => import("./views/_superadmin/account-creation"),
   },
   {
     path: "/account-history",
     name: "account-history",
     meta: { authRequired: true },
-    component: () => import("./views/_account-history/list"),
+    component: () => import("./views/_superadmin/account-history"),
   },
   {
     path: "/user-activity-logs",
     name: "user-activity-logs",
     meta: { authRequired: true },
-    component: () => import("./views/_user-activity-logs/list"),
+    component: () => import("./views/_superadmin/user-activity-logs"),
   },
   {
     path: "/ticket-tracker",
     name: "ticket-tracker",
     meta: { authRequired: true },
-    component: () => import("./views/_ticket-tracker/list"),
+    component: () => import("./views/_superadmin/ticket-tracker"),
   },
   {
     path: "/department-3rdparty",
     name: "department-3rdparty",
     meta: { authRequired: true },
-    component: () => import("./views/_department-3rdparty/list"),
+    component: () => import("./views/_superadmin/department-3rdparty"),
   },
   {
     path: "/all-reports",
     name: "all-reports",
     meta: { authRequired: true },
-    component: () => import("./views/_all-reports/list"),
+    component: () => import("./views/_superadmin/all-reports"),
   },
   {
     path: "/application-tracker",
     name: "application-tracker",
     meta: { authRequired: true },
-    component: () => import("./views/_application-trackers/list"),
+    component: () => import("./views/_superadmin/application-trackers"),
   },
   {
     path: "/finance-dashboard",
@@ -836,5 +836,17 @@ export default [
     name: "pc-supplier-price-list",
     meta: { authRequired: true },
     component: () => import("./views/_pc-supplier/price-list"),
+  },
+  {
+    path: "/account-creation/report",
+    name: "account-creation-report",
+    meta: { authRequired: true },
+    component: () => import("./views/_account-creation/report"),
+  },
+  {
+    path: "/account-creation/dashboard",
+    name: "account-creation-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_account-creation/dashboard"),
   },
 ];

@@ -974,4 +974,23 @@ export const menuItems = [
         icon: "bx bx-circle",
         link: "/pc-supplier/price-list"
     },
+    // ACCOUNT CREATION
+    
+    {
+        id:1,
+        label:"ACCOUNT CREATION",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "Dashboard",
+        icon: "bx bxs-dashboard",
+        link: "/account-creation/dashboard"
+    },
+    {
+        id: 1,
+        label: "REPORT",
+        icon: "bx bx-circle",
+        link: "/account-creation/report"
+    },
 ];
