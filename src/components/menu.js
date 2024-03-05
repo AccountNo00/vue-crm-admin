@@ -1043,4 +1043,54 @@ export const menuItems = [
         icon: "bx bx-circle",
         link: "/sim/price-list"
     },
+    // INVENTORY
+    
+    {
+        id:1,
+        label:"INVENTORY",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "Dashboard",
+        icon: "bx bxs-dashboard",
+        link: "/inventory/dashboard"
+    },
+    {
+        id: 1,
+        label: "PC SUPPLIER",
+        icon: "bx bx-circle",
+        link: "/inventory/pc-supplier"
+    },
+    {
+        id: 1,
+        label: "C-BAND INSTALLER",
+        icon: "bx bx-circle",
+        link: "/inventory/cband-installer"
+    },
+    {
+        id: 1,
+        label: "PRICE LIST",
+        icon: "bx bx-circle",
+        link: "/inventory/price-list"
+    },
+    {
+        id: 1,
+        label: "INVENTORY REPORT",
+        icon: "bx bx-circle",
+        subItems: [
+            {
+                id: 2,
+                label: "PC SUPPLIER",
+                link: "/inventory/inventory-pc-supplier",
+                parentId: 1
+            },
+            {
+                id: 2,
+                label: "VIDEO PROVIDER",
+                link: "/inventory/inventory-video-provider",
+                parentId: 1
+            },
+        ]
+    }
 ];

@@ -886,4 +886,40 @@ export default [
     meta: { authRequired: true },
     component: () => import("./views/_sim/price-list"),
   },
+  {
+    path: "/inventory/dashboard",
+    name: "inventory-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_inventory/dashboard"),
+  },
+  {
+    path: "/inventory/cband-installer",
+    name: "inventory-cband-installer",
+    meta: { authRequired: true },
+    component: () => import("./views/_inventory/cband-installer"),
+  },
+  {
+    path: "/inventory/pc-supplier",
+    name: "inventory-pc-supplier",
+    meta: { authRequired: true },
+    component: () => import("./views/_inventory/pc-supplier"),
+  },
+  {
+    path: "/inventory/price-list",
+    name: "inventory-price-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_inventory/price-list"),
+  },
+  {
+    path: "/inventory/inventory-pc-supplier",
+    name: "inventory-inventory-pc-supplier",
+    meta: { authRequired: true },
+    component: () => import("./views/_inventory/inventory-pc-supplier"),
+  },
+  {
+    path: "/inventory/inventory-video-provider",
+    name: "inventory-inventory-video-provider",
+    meta: { authRequired: true },
+    component: () => import("./views/_inventory/inventory-video-provider"),
+  },
 ];

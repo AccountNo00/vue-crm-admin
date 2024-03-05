@@ -199,7 +199,6 @@ export default {
 					</div>
 				</div>
 			</div>
-			
 			<div class="col-12 bg bg-white" v-if="this.tabs[1] == true">
 				<div class="px-3 mt-2 mb-0">
 					<div class="row">
