@@ -1092,5 +1092,42 @@ export const menuItems = [
                 parentId: 1
             },
         ]
-    }
+    },
+    // HELP DESK
+    {
+        id:1,
+        label:"HELP DESK",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "NEW ACTIVATED",
+        icon: "bx bx-circle",
+        link: "/help-desk/new-activated"
+    },
+    {
+        id: 1,
+        label: "SALES",
+        icon: "bx bx-circle",
+        subItems: [
+            {
+                id: 2,
+                label: "OCBS",
+                link: "/help-desk/ocbs-sales",
+                parentId: 1
+            },
+            {
+                id: 2,
+                label: "ARENA",
+                link: "/help-desk/arena-sales",
+                parentId: 1
+            },
+        ]
+    },
+    {
+        id: 1,
+        label: "ARENA/OCBS STATUS",
+        icon: "bx bx-circle",
+        link: "/help-desk/arena-ocbs-status"
+    },
 ];

@@ -922,4 +922,28 @@ export default [
     meta: { authRequired: true },
     component: () => import("./views/_inventory/inventory-video-provider"),
   },
+  {
+    path: "/help-desk/new-activated",
+    name: "help-desk-new-activated",
+    meta: { authRequired: true },
+    component: () => import("./views/_help-desk/new-activated"),
+  },
+  {
+    path: "/help-desk/ocbs-sales",
+    name: "help-desk-ocbs-sales",
+    meta: { authRequired: true },
+    component: () => import("./views/_help-desk/ocbs-sales"),
+  },
+  {
+    path: "/help-desk/arena-sales",
+    name: "help-desk-arena-sales",
+    meta: { authRequired: true },
+    component: () => import("./views/_help-desk/arena-sales"),
+  },
+  {
+    path: "/help-desk/arena-ocbs-status",
+    name: "help-desk-arena-ocbs-status",
+    meta: { authRequired: true },
+    component: () => import("./views/_help-desk/arena-ocbs-status"),
+  },
 ];
