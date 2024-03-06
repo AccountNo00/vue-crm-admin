@@ -1130,4 +1130,52 @@ export const menuItems = [
         icon: "bx bx-circle",
         link: "/help-desk/arena-ocbs-status"
     },
+    // SALE MANAGER
+    {
+        id:1,
+        label:"SALES MANAGER",
+        isTitle: true,
+    },
+    {
+        id: 1,
+        label: "DASHBOARD",
+        icon: "bx bx-circle",
+        link: "/sales-manager/dashboard"
+    },
+    {
+        id: 1,
+        label: "NEW APPLICATION",
+        icon: "bx bx-circle",
+        link: "/sales-manager/new-application"
+    },
+    {
+        id: 1,
+        label: "OCBS LIST",
+        icon: "bx bx-circle",
+        link: "/sales-manager/ocbs-list"
+    },
+    {
+        id: 1,
+        label: "ARENA LIST",
+        icon: "bx bx-circle",
+        link: "/sales-manager/arena-list"
+    },
+    {
+        id: 1,
+        label: "APPROVAL QUEUE",
+        icon: "bx bx-circle",
+        link: "/sales-manager/approval-queue"
+    },
+    {
+        id: 1,
+        label: "DELETE DOUBLE",
+        icon: "bx bx-circle",
+        link: "/sales-manager/delete-double"
+    },
+    {
+        id: 1,
+        label: "MAPS",
+        icon: "bx bx-circle",
+        link: "/sales-manager/maps"
+    },
 ];

@@ -946,4 +946,52 @@ export default [
     meta: { authRequired: true },
     component: () => import("./views/_help-desk/arena-ocbs-status"),
   },
+  {
+    path: "/sales-manager/dashboard",
+    name: "sales-manager-dashboard",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/dashboard"),
+  },
+  {
+    path: "/sales-manager/arena-list",
+    name: "sales-manager-arena-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/arena-list"),
+  },
+  {
+    path: "/sales-manager/ocbs-list",
+    name: "sales-manager-ocbs-list",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/ocbs-list"),
+  },
+  {
+    path: "/sales-manager/ocbs-list-view/:id",
+    name: "sales-manager-ocbs-list-view",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/ocbs-list-view"),
+  },
+  {
+    path: "/sales-manager/new-application",
+    name: "sales-manager-new-application",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/new-application"),
+  },
+  {
+    path: "/sales-manager/approval-queue",
+    name: "sales-manager-approval-queue",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/approval-queue"),
+  },
+  {
+    path: "/sales-manager/delete-double",
+    name: "sales-manager-delete-double",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/delete-double"),
+  },
+  {
+    path: "/sales-manager/maps",
+    name: "sales-manager-maps",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-manager/maps"),
+  },
 ];
