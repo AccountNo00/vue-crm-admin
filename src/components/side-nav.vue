@@ -3,7 +3,7 @@ import MetisMenu from "metismenujs/dist/metismenujs";
 
 import "@/assets/customcss/custom.css"
 import { menuItems } from "./menu";
-
+import { mapGetters } from "vuex";
 /**
  * Sidenav component
  */
@@ -15,6 +15,7 @@ export default {
     };
   },
   mounted: function () {
+    console.log(this.profile)
     if (document.getElementById("side-menu")) new MetisMenu("#side-menu");
     var links = document.getElementsByClassName("side-nav-link-ref");
     var matchingMenuItem = null;
@@ -70,6 +71,11 @@ export default {
       }
     }
   },
+  computed:{
+		...mapGetters("auth", {
+			profile: "profile",
+		}),
+  },
   methods: {
     /**
      * Returns true or false if given menu item has child or not
@@ -82,6 +88,7 @@ export default {
     toggleMenu(event) {
       event.currentTarget.nextElementSibling.classList.toggle("mm-show");
     },
+    ...mapGetters([])
   },
 };
 </script>
@@ -94,10 +101,10 @@ export default {
     <!-- Left Menu Start -->
     <ul id="side-menu" class="metismenu list-unstyled">
       <template v-for="item in menuItems">
-        <li class="menu-title" v-if="item.isTitle" :key="item.id">
+        <li class="menu-title" v-if="item.isTitle && item.role == this.profile.role" :key="item.id">
           {{ $t(item.label) }}
         </li>
-        <li v-if="!item.isTitle && !item.isLayout" :key="item.id">
+        <li v-if="!item.isTitle && !item.isLayout && item.role == this.profile.role" :key="item.id">
           <a
             v-if="hasItems(item)"
             href="javascript:void(0);"
@@ -126,6 +133,19 @@ export default {
               >{{ $t(item.badge.text) }}</span
             >
           </router-link>
+          <!-- <router-link
+            :to="item.link"
+            v-if="item.role == this.profile.role"
+            class="side-nav-link-ref"
+          >
+            <i :class="`bx ${item.icon}`" v-if="item.icon"></i>
+            <span>{{ $t(item.label) }}</span>
+            <span
+              :class="`badge rounded-pill bg-${item.badge.variant} float-end`"
+              v-if="item.badge"
+              >{{ $t(item.badge.text) }}</span
+            >
+          </router-link> -->
 
           <ul v-if="hasItems(item)" class="sub-menu" aria-expanded="false">
             <li v-for="(subitem, index) of item.subItems" :key="index">
@@ -159,6 +179,38 @@ export default {
               </ul>
             </li>
           </ul>
+          <!-- <ul v-if="item.role == this.profile.role" class="sub-menu" aria-expanded="false">
+            <li v-for="(subitem, index) of item.subItems" :key="index">
+              <router-link
+                :to="subitem.link"
+                v-if="!hasItems(subitem)"
+                class="side-nav-link-ref"
+                >{{ $t(subitem.label) }}</router-link
+              >
+              <a
+                v-if="hasItems(subitem)"
+                class="side-nav-link-a-ref has-arrow"
+                href="javascript:void(0);"
+                >{{ $t(subitem.label) }}</a
+              >
+              <ul
+                v-if="hasItems(subitem)"
+                class="sub-menu mm-collapse"
+                aria-expanded="false"
+              >
+                <li
+                  v-for="(subSubitem, index) of subitem.subItems"
+                  :key="index"
+                >
+                  <router-link
+                    :to="subSubitem.link"
+                    class="side-nav-link-ref"
+                    >{{ $t(subSubitem.label) }}</router-link
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul> -->
         </li>
       </template>
     </ul>

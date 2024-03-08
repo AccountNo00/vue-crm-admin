@@ -1,93 +1,91 @@
-import { getFirebaseBackend } from '../../authUtils.js'
-
+import $cookies from "vue-cookies";
+import router from "../../router/index";
+import $api from "../api";
 export const state = {
-    currentUser: sessionStorage.getItem('authUser'),
+    token: $cookies.get("token"),
+    role: $cookies.get("role"),
 }
 
 export const mutations = {
-    SET_CURRENT_USER(state, newValue) {
-        state.currentUser = newValue
-        saveState('auth.currentUser', newValue)
-    }
+    setToken(state ,data) {
+        var token = `${data.token_type} ${data.access_token}`;
+        var role = `${data.role}`;
+        state.token = token;
+        state.role = role;
+        $cookies.set("token", token);
+        $cookies.set("role", role);
+        router.replace({ path: '/' }).catch(() => {});
+    },
+    destroyAuth(state) {
+        // console.log("destroyAuth");
+        $cookies.remove("token");
+        $cookies.remove("profile");
+        state.token = null;
+        state.profile.username = null;
+        router.replace({ path: "/login" }).catch(() => { });
+    },
 }
 
 export const getters = {
-    // Whether the user is currently logged in.
-    loggedIn(state) {
-        return !!state.currentUser
-    }
+    authenticated(state) {
+        return state.token != null;
+    },
+    bearer_token(state) {
+        return state.token;
+    },
+    profile(state) {
+        return {
+            username: state.profile_token,
+            id: state.user_token,
+            role: state.role,
+        };
+    },
+
 }
 
 export const actions = {
-    // This is automatically run in `src/state/store.js` when the app
-    // starts, along with any other actions named `init` in other modules.
-    // eslint-disable-next-line no-unused-vars
-    init({ state, dispatch }) {
-        dispatch('validate')
-    },
-
-    // Logs in the current user.
-    logIn({ commit, dispatch, getters }, { email, password } = {}) {
-        if (getters.loggedIn) return dispatch('validate')
-
-        return getFirebaseBackend().loginUser(email, password).then((response) => {
-            const user = response
-            commit('SET_CURRENT_USER', user)
-            return user
-        });
-    },
-
-    // Logs out the current user.
-    logOut({ commit }) {
-        // eslint-disable-next-line no-unused-vars
-        commit('SET_CURRENT_USER', null)
-        return new Promise((resolve, reject) => {
-            // eslint-disable-next-line no-unused-vars
-            getFirebaseBackend().logout().then((response) => {
-                resolve(true);
-            }).catch((error) => {
-                reject(this._handleError(error));
-            })
-        });
-    },
-
-    // register the user
-    register({ commit, dispatch, getters }, { username, email, password } = {}) {
-        if (getters.loggedIn) return dispatch('validate')
-
-        return getFirebaseBackend().registerUser(username, email, password).then((response) => {
-            const user = response
-            commit('SET_CURRENT_USER', user)
-            return user
-        });
-    },
-
-    // register the user
-    // eslint-disable-next-line no-unused-vars
-    resetPassword({ commit, dispatch, getters }, { email } = {}) {
-        if (getters.loggedIn) return dispatch('validate')
-
-        return getFirebaseBackend().forgetPassword(email).then((response) => {
-            const message = response.data
-            return message
-        });
-    },
-
-    // Validates the current user's token and refreshes it
-    // with new data from the API.
-    // eslint-disable-next-line no-unused-vars
-    validate({ commit, state }) {
-        if (!state.currentUser) return Promise.resolve(null)
-        const user = getFirebaseBackend().getAuthenticatedUser();
-        commit('SET_CURRENT_USER', user)
-        return user;
-    },
-}
-
-// ===
-// Private helpers
-// ===
-
-function saveState(key, state) {
-    window.sessionStorage.setItem(key, JSON.stringify(state))
+    loginUser({ rootGetters ,commit}, pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post("login", pl, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+                        commit("setToken", res.data.data);
+                        // commit("setProfile", res.data);
+						resolve(res);
+					}
+				})
+				.catch(function (err) {
+					resolve(err);
+				});
+		});
+	},
+    registerUser({ rootGetters, dispatch }, pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post("register", pl, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					console.log(res);
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err.response.status == 401) {
+						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					}
+					if (err.response.status == 422) {
+						resolve(err.response.data);
+					}
+				});
+		});
+	},
 }

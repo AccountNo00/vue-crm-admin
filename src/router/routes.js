@@ -12,18 +12,19 @@ export default [
   {
     path: "/login",
     name: "login",  
-    component: () => import("./views/account/login"),
+    component: () => import("./views/_auth/login"),
     meta: {
-      beforeResolve(routeTo, routeFrom, next) {
-        // If the user is already logged in
-        if (store.getters["auth/loggedIn"]) {
-          // Redirect to the home page instead
-          next({ name: "default" });
-        } else {
-          // Continue to the login page
-          next();
-        }
-      },
+      requiresVisitor: true,
+      // beforeResolve(routeTo, routeFrom, next) {
+      //   // If the user is already logged in
+      //   if (store.getters["auth/loggedIn"]) {
+      //     // Redirect to the home page instead
+      //     next({ name: "default" });
+      //   } else {
+      //     // Continue to the login page
+      //     next();
+      //   }
+      // },
     },
   },
   {

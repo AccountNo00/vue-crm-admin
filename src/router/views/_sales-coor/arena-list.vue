@@ -1,7 +1,8 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonData from "@/assets/json/ocbs-list.json"
+// import jsonData from "@/assets/json/ocbs-list.json"
+import { mapActions } from "vuex";
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -23,7 +24,7 @@ export default {
     data() {
         return {
             title: "Dashboard",
-			data: jsonData,
+			data: [],
             items: [
                 {
                     text: "Dashboards",
@@ -39,6 +40,9 @@ export default {
         };
     },
 	methods:{
+		...mapActions("salesCoor", {
+			getList: "getArenaList",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
@@ -47,12 +51,23 @@ export default {
         },
 		view(row){
 			this.$router.push({path:`/ocbs-list-view/${row.id}`})
-		}
+		},
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:50,
+				sort: "created_at",
+				order: "desc",
+			};
+			const data = await this.getList(pl);
+			this.data.list = data.data.data;
+		},
 	},
     mounted() {
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
+		this.initList(1);
     },
 };
 </script>
@@ -118,11 +133,11 @@ export default {
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(row,index) in data" :key="index">
-											<td>ARENA-SAMPLE</td>
-											<td>{{ row.sales_coor }}</td>
+										<tr v-for="(row,index) in this.data.list" :key="index">
+											<td>{{row.region}}</td>
+											<td>{{ row.sales_coordinator_name }}</td>
 											<td>{{ row.business_name }}</td>
-											<td>{{ row.address }}</td>
+											<td>{{ row.business_address }}</td>
 											<td>{{ row.region }}</td>
 											<td>{{ row.province }}</td>
 											<td>{{ row.owner }}</td>
@@ -144,7 +159,32 @@ export default {
 													<strong>CLOSED</strong>
 												</span>
 											</td>
-											<td><strong>{{ row.finance_status }}</strong></td>
+											<td>
+												<span v-if="row.finance_status == 0" >
+													<strong>NEW</strong>
+												</span>
+												<span v-else-if="row.finance_status == 1">
+													<strong>APPROVED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 2" >
+													<strong>SCHEDULED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 3" >
+													<strong>FOR CHECKING</strong>
+												</span>
+												<span v-else-if="row.finance_status == 4" >
+													<strong>DENIED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 5" >
+													<strong>RETURNED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 6" >
+													<strong>UPDATED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 7" >
+													<strong>PENDING</strong>
+												</span>
+											</td>
 											<td>
 												<b-button @click="view(row)" variant="primary" size="sm">REVIEW</b-button>
 											</td>

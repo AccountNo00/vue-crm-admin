@@ -829,126 +829,147 @@ export const menuItems = [
         id:1,
         label:"SUPERADMIN",
         isTitle: true,
+        role: [0],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/"
+        link: "/",
+        role: [0],
     },
     {
         id: 1,
         label: "Account creation",
         icon: "bx bx-circle",
-        link: "/account-creation"
+        link: "/account-creation",
+        role: [0],
     },
     {
         id: 1,
         label: "Account history",
         icon: "bx bx-circle",
-        link: "/account-history"
+        link: "/account-history",
+        role: [0],
     },
     {
         id: 1,
         label: "User activity logs",
         icon: "bx bx-circle",
-        link: "/user-activity-logs"
+        link: "/user-activity-logs",
+        role: [0],
     },
     {
         id: 1,
         label: "Ticket tracker",
         icon: "bx bx-circle",
-        link: "/ticket-tracker"
+        link: "/ticket-tracker",
+        role: [0],
     },
     {
         id: 1,
         label: "Department/3rd party",
         icon: "bx bx-circle",
-        link: "/department-3rdparty"
+        link: "/department-3rdparty",
+        role: [0],
     },
     {
         id: 1,
         label: "All report",
         icon: "bx bx-circle",
-        link: "/all-reports"
+        link: "/all-reports",
+        role: [0],
     },
     {
         id: 1,
         label: "Application tracker",
         icon: "bx bx-circle",
-        link: "/application-tracker"
+        link: "/application-tracker",
+        role: [0],
     },
     // FINANCE
     {
         id:1,
         label:"FINANCE",
         isTitle: true,
+        role: [2],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/finance-dashboard"
+        link: "/finance-dashboard",
+        role: [2],
     },
     {
         id: 1,
         label: "Report",
         icon: "bx bx-circle",
-        link: "/finance-report"
+        link: "/finance-report",
+        role: [2],
     },
     // SALES COOR
     {
         id:1,
         label:"SALES COOR",
         isTitle: true,
+        role: [1],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/sales-coor-dashboard"
+        link: "/sales-coor-dashboard",
+        role: [1],
     },
     {
         id: 1,
         label: "NEW APPLICATION",
         icon: "bx bx-circle",
-        link: "/new-application"
+        link: "/new-application",
+        role: [1],
     },
     {
         id: 1,
         label: "OCBS LIST",
         icon: "bx bx-circle",
-        link: "/ocbs-list"
+        link: "/ocbs-list",
+        role: [1],
     },
     {
         id: 1,
         label: "ARENA LIST",
         icon: "bx bx-circle",
-        link: "/arena-list"
+        link: "/arena-list",
+        role: [1],
     },
     // CBAND
     {
         id:1,
         label:"CBAND",
         isTitle: true,
+        role: [4],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/cband/dashboard"
+        link: "/cband/dashboard",
+        role: [4],
     },
     {
         id: 1,
         label: "REPORT",
         icon: "bx bx-circle",
-        link: "/cband/report"
+        link: "/cband/report",
+        role: [4],
     },
     {
         id: 1,
         label: "PRICE LIST",
         icon: "bx bx-circle",
-        link: "/cband/price-list"
+        link: "/cband/price-list",
+        role: [4],
     },
     // PC SUPPLIER
     {
@@ -980,18 +1001,21 @@ export const menuItems = [
         id:1,
         label:"ACCOUNT CREATION",
         isTitle: true,
+        role: [7],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/account-creation/dashboard"
+        link: "/account-creation/dashboard",
+        role: [7],
     },
     {
         id: 1,
         label: "REPORT",
         icon: "bx bx-circle",
-        link: "/account-creation/report"
+        link: "/account-creation/report",
+        role: [7],
     },
     // TRAINOR
     
@@ -999,24 +1023,28 @@ export const menuItems = [
         id:1,
         label:"TRAINOR",
         isTitle: true,
+        role: [5],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/trainor/dashboard"
+        link: "/trainor/dashboard",
+        role: [5],
     },
     {
         id: 1,
         label: "REPORT",
         icon: "bx bx-circle",
-        link: "/trainor/report"
+        link: "/trainor/report",
+        role: [5],
     },
     {
         id: 1,
         label: "TRAINING LIST",
         icon: "bx bx-circle",
-        link: "/trainor/training-list"
+        link: "/trainor/training-list",
+        role: [5],
     },
     // SIM
     
@@ -1024,24 +1052,28 @@ export const menuItems = [
         id:1,
         label:"SIM",
         isTitle: true,
+        role: [3],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/sim/dashboard"
+        link: "/sim/dashboard",
+        role: [3],
     },
     {
         id: 1,
         label: "REPORT",
         icon: "bx bx-circle",
-        link: "/sim/report"
+        link: "/sim/report",
+        role: [3],
     },
     {
         id: 1,
         label: "PRICE LIST",
         icon: "bx bx-circle",
-        link: "/sim/price-list"
+        link: "/sim/price-list",
+        role: [3],
     },
     // INVENTORY
     
@@ -1049,35 +1081,41 @@ export const menuItems = [
         id:1,
         label:"INVENTORY",
         isTitle: true,
+        role: [9],
     },
     {
         id: 1,
         label: "Dashboard",
         icon: "bx bxs-dashboard",
-        link: "/inventory/dashboard"
+        link: "/inventory/dashboard",
+        role: [9],
     },
     {
         id: 1,
         label: "PC SUPPLIER",
         icon: "bx bx-circle",
-        link: "/inventory/pc-supplier"
+        link: "/inventory/pc-supplier",
+        role: [9],
     },
     {
         id: 1,
         label: "C-BAND INSTALLER",
         icon: "bx bx-circle",
-        link: "/inventory/cband-installer"
+        link: "/inventory/cband-installer",
+        role: [9],
     },
     {
         id: 1,
         label: "PRICE LIST",
         icon: "bx bx-circle",
-        link: "/inventory/price-list"
+        link: "/inventory/price-list",
+        role: [9],
     },
     {
         id: 1,
         label: "INVENTORY REPORT",
         icon: "bx bx-circle",
+        role: [9],
         subItems: [
             {
                 id: 2,
@@ -1098,17 +1136,20 @@ export const menuItems = [
         id:1,
         label:"HELP DESK",
         isTitle: true,
+        role: [8],
     },
     {
         id: 1,
         label: "NEW ACTIVATED",
         icon: "bx bx-circle",
-        link: "/help-desk/new-activated"
+        link: "/help-desk/new-activated",
+        role: [8],
     },
     {
         id: 1,
         label: "SALES",
         icon: "bx bx-circle",
+        role: [8],
         subItems: [
             {
                 id: 2,
@@ -1128,54 +1169,63 @@ export const menuItems = [
         id: 1,
         label: "ARENA/OCBS STATUS",
         icon: "bx bx-circle",
-        link: "/help-desk/arena-ocbs-status"
+        link: "/help-desk/arena-ocbs-status",
+        role: [8],
     },
     // SALE MANAGER
     {
         id:1,
         label:"SALES MANAGER",
         isTitle: true,
+        role: [6],
     },
     {
         id: 1,
         label: "DASHBOARD",
         icon: "bx bx-circle",
-        link: "/sales-manager/dashboard"
+        link: "/sales-manager/dashboard",
+        role: [6],
     },
     {
         id: 1,
         label: "NEW APPLICATION",
         icon: "bx bx-circle",
-        link: "/sales-manager/new-application"
+        link: "/sales-manager/new-application",
+        role: [6],
     },
     {
         id: 1,
         label: "OCBS LIST",
         icon: "bx bx-circle",
-        link: "/sales-manager/ocbs-list"
+        link: "/sales-manager/ocbs-list",
+        role: [6],
     },
     {
         id: 1,
         label: "ARENA LIST",
         icon: "bx bx-circle",
-        link: "/sales-manager/arena-list"
+        link: "/sales-manager/arena-list",
+        role: [6],
     },
     {
         id: 1,
         label: "APPROVAL QUEUE",
         icon: "bx bx-circle",
-        link: "/sales-manager/approval-queue"
+        link: "/sales-manager/approval-queue",
+        role: [6],
     },
     {
         id: 1,
         label: "DELETE DOUBLE",
         icon: "bx bx-circle",
-        link: "/sales-manager/delete-double"
+        link: "/sales-manager/delete-double",
+        role: [6],
     },
     {
         id: 1,
         label: "MAPS",
         icon: "bx bx-circle",
-        link: "/sales-manager/maps"
+        link: "/sales-manager/maps",
+        role: [6],
     },
 ];
