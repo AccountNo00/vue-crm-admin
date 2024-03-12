@@ -824,69 +824,7 @@ export const menuItems = [
     //     ]
     // }
 
-    // CRM
-    {
-        id:1,
-        label:"SUPERADMIN",
-        isTitle: true,
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "Dashboard",
-        icon: "bx bxs-dashboard",
-        link: "/",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "Account creation",
-        icon: "bx bx-circle",
-        link: "/account-creation",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "Account history",
-        icon: "bx bx-circle",
-        link: "/account-history",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "User activity logs",
-        icon: "bx bx-circle",
-        link: "/user-activity-logs",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "Ticket tracker",
-        icon: "bx bx-circle",
-        link: "/ticket-tracker",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "Department/3rd party",
-        icon: "bx bx-circle",
-        link: "/department-3rdparty",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "All report",
-        icon: "bx bx-circle",
-        link: "/all-reports",
-        role: [0],
-    },
-    {
-        id: 1,
-        label: "Application tracker",
-        icon: "bx bx-circle",
-        link: "/application-tracker",
-        role: [0],
-    },
+    
     // FINANCE
     {
         id:1,
@@ -942,6 +880,55 @@ export const menuItems = [
         icon: "bx bx-circle",
         link: "/arena-list",
         role: [1],
+    },
+    // SUPERADMIN
+    {
+        id:1,
+        label:"SUPERADMIN",
+        isTitle: true,
+        role: [0],
+    },
+    {
+        id: 1,
+        label: "Dashboard",
+        icon: "bx bxs-dashboard",
+        link: "/",
+        role: [0],
+    },
+    {
+        id: 1,
+        label: "Account creation",
+        icon: "bx bx-circle",
+        link: "/account-creation",
+        role: [0],
+    },
+    {
+        id: 1,
+        label: "Account history",
+        icon: "bx bx-circle",
+        link: "/account-history",
+        role: [0],
+    },
+    {
+        id: 1,
+        label: "User activity logs",
+        icon: "bx bx-circle",
+        link: "/user-activity-logs",
+        role: [0],
+    },
+    {
+        id: 1,
+        label: "Ticket tracker",
+        icon: "bx bx-circle",
+        link: "/ticket-tracker",
+        role: [0],
+    },
+    {
+        id: 1,
+        label: "Department/3rd party",
+        icon: "bx bx-circle",
+        link: "/department-3rdparty",
+        role: [0],
     },
     // CBAND
     {
@@ -1227,5 +1214,22 @@ export const menuItems = [
         icon: "bx bx-circle",
         link: "/sales-manager/maps",
         role: [6],
+    },
+    // GENERAL
+    {
+        id: 1,
+        label: "All report",
+        icon: "bx bx-circle",
+        link: "/all-reports",
+        role: [0],
+        general: true,
+    },
+    {
+        id: 1,
+        label: "Application tracker",
+        icon: "bx bx-circle",
+        link: "/application-tracker",
+        role: [0],
+        general: true,
     },
 ];

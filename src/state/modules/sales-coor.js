@@ -22,7 +22,7 @@ export const actions = {
 				})
 				.then(function (res) {
 					if (res.status == 200) {
-						resolve(res.data.data);
+						resolve(res.data);
 					}
 				})
 				.catch(function (err) {
@@ -48,6 +48,67 @@ export const actions = {
 				.catch(function (err) {
 					if (err.response.status == 401) {
 						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					}
+				});
+		});
+	},
+	dashboardStats({ rootGetters, dispatch },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.get(`all-report/sales?`+ new URLSearchParams(pl).toString(), {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err.response.status == 401) {
+						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					}
+				});
+		});
+	},
+	dashboardList({ rootGetters, dispatch },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.get(`application/region/count?`+ new URLSearchParams(pl).toString(), {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err.response.status == 401) {
+						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					}
+				});
+		});
+	},
+	createApplication({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post(`application/create?` + new URLSearchParams(pl).toString(),{}, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+					
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
 					}
 				});
 		});

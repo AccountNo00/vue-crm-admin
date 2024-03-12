@@ -803,6 +803,12 @@ export default [
     component: () => import("./views/_sales-coor/arena-list"),
   },
   {
+    path: "/arena-list-view/:id",
+    name: "arena-list-view",
+    meta: { authRequired: true },
+    component: () => import("./views/_sales-coor/arena-list-view"),
+  },
+  {
     path: "/cband/dashboard",
     name: "cband-dashboard",
     meta: { authRequired: true },

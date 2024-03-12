@@ -35,7 +35,6 @@ export default {
 		},
 	},
 	mounted() {
-		console.log('test')
 	},
 };
 </script>
@@ -53,6 +52,7 @@ export default {
 								placeholder="Enter email"
 								type="text"
 								v-model="username"
+								v-on:keyup.enter="login()"
 							/>
 						</label>
 						<label>
@@ -62,6 +62,7 @@ export default {
 								placeholder="Enter password"
 								type="password"
 								v-model="password"
+								v-on:keyup.enter="login()"
 							/>
 						</label>
 					</div>

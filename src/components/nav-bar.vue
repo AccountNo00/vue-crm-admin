@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import $cookies from "vue-cookies";
 // import { SimpleBar } from "simplebar-vue3";
 import { authComputed } from "@/state/helpers";
 
@@ -87,6 +88,12 @@ export default {
           name: "default",
         });
       });
+    },
+    logOutFunction(){
+        $cookies.remove("token");
+        $cookies.remove("profile");
+        $cookies.remove("role");
+        location.reload();
     },
   },
   computed: {
@@ -651,12 +658,15 @@ export default {
             {{ $t("navbar.dropdown.henry.list.lockscreen") }}
           </b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider> -->
-          <router-link to="/logout" class="dropdown-item text-danger">
+          <!-- <router-link to="/logout" class="dropdown-item text-danger">
             <i
               class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
             ></i>
             {{ $t("navbar.dropdown.henry.list.logout") }}
-          </router-link>
+          </router-link> -->
+          <button  class="dropdown-item text-danger" @click="logOutFunction()"><i
+              class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
+            ></i>Logout</button>
         </b-dropdown>
 
         <!-- <div class="dropdown d-inline-block">

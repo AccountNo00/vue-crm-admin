@@ -20,8 +20,10 @@ export const mutations = {
         // console.log("destroyAuth");
         $cookies.remove("token");
         $cookies.remove("profile");
+        $cookies.remove("role");
         state.token = null;
         state.profile.username = null;
+        state.role = null;
         router.replace({ path: "/login" }).catch(() => { });
     },
 }
@@ -60,7 +62,9 @@ export const actions = {
 					}
 				})
 				.catch(function (err) {
-					resolve(err);
+					if (err) {
+						resolve(err);
+					}
 				});
 		});
 	},

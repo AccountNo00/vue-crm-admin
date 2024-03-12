@@ -1,7 +1,9 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonData from "@/assets/json/ocbs-list.json"
+// import jsonData from "@/assets/json/ocbs-list.json"
+import { mapActions } from "vuex";
+import Loader from '../../../components/widgets/loader.vue'
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -15,15 +17,18 @@ export default {
                 content: appConfig.description,
             },
         ],
+		loading:false,
     },
     components: {
         Layout,
+		Loader
 		// Pagination
     },
     data() {
         return {
             title: "Dashboard",
-			data: jsonData,
+			data: [],
+			loading:false,
             items: [
                 {
                     text: "Dashboards",
@@ -34,11 +39,20 @@ export default {
                     active: true,
                 },
             ],
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries: 50,
+				search:'',
+			},
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
         };
     },
 	methods:{
+		...mapActions("salesCoor", {
+			getList: "getOcbsList",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
@@ -47,9 +61,25 @@ export default {
         },
 		view(row){
 			this.$router.push({path:`/ocbs-list-view/${row.id}`})
-		}
+		},
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries,
+				sort: "created_at",
+				order: "desc",
+			};
+			if(this.filterData.search){
+				pl['search'] = this.filterData.search;
+			}
+			this.loading = true;
+			const data = await this.getList(pl);
+			this.loading = false;
+			this.data.list = data.data.data;
+		},
 	},
     mounted() {
+		this.initList(1)
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -60,6 +90,7 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
         <div class="row">
 			<div class="col-12 px-4 mt-2">
 				<div class="col-12">
@@ -78,11 +109,11 @@ export default {
 										<div class="d-flex">
 											<div class="d-flex">
 												<label class="mt-2" style="width:200px;"><strong>Show entries:</strong></label>
-												<select class="mx-2 form-control">
+												<select class="mx-2 form-control" v-model="this.filterData.show_entries" @change="initList(1)">
 													<option value="10">10</option>
 													<option value="25">25</option>
 													<option value="50">50</option>
-													<option value="-1">All</option>
+													<option value="0">All</option>
 												</select>
 											</div>
 											<b-button variant="success mx-1">EXCEL</b-button>
@@ -95,7 +126,7 @@ export default {
 									<div class="col-2 px-4 mt-2" style="float:right !important;">
 										<div class="d-flex">
 											<label class="m-2"><strong>SEARCH:</strong></label>
-											<input class="form-control"/>
+											<input class="form-control" v-model="this.filterData.search" @input="initList(1)"/>
 										</div>
 									</div>
 								</div>
@@ -118,33 +149,64 @@ export default {
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(row,index) in data" :key="index">
-											<td>{{ row.reference_id }}</td>
-											<td>{{ row.sales_coor }}</td>
+										<tr v-for="(row,index) in this.data.list" :key="index">
+											<td>{{ row.region }}</td>
+											<td>{{ row.sales_coordinator_name }}</td>
 											<td>{{ row.business_name }}</td>
-											<td>{{ row.address }}</td>
+											<td>{{ row.business_address }}</td>
 											<td>{{ row.region }}</td>
 											<td>{{ row.province }}</td>
 											<td>{{ row.owner }}</td>
 											<td>{{ row.guarantor }}</td>
 											<td>
-												<span v-if="row.status == 1" style="color:#84bbf5;">
-													<strong>LEADS</strong>
+												<span v-if="row.status == 0" style="color:#84bbf5;">
+												<strong>LEADS</strong>
 												</span>
-												<span v-else-if="row.status == 2" style="color:#967705;">
+												<span v-else-if="row.status == 1" style="color:#967705;">
 													<strong>FIT</strong>
 												</span>
-												<span v-else-if="row.status == 3" style="color:green;">
+												<span v-else-if="row.status == 2" style="color:green;">
 													<strong>ACTIVATED</strong>
 												</span>
-												<span v-else-if="row.status == 4" style="color:#d17166;">
+												<span v-else-if="row.status == 3" style="color:#d17166;">
 													<strong>CANCELLED</strong>
 												</span>
-												<span v-else-if="row.status == 5" style="color:#6c757d;">
+												<span v-else-if="row.status == 4" style="color:#6c757d;">
 													<strong>CLOSED</strong>
 												</span>
+												<span v-else-if="row.status == 5" style="color:#6c757d;">
+													<strong>DENIED</strong>
+												</span>
+												<span v-else-if="row.status == 6" style="color:#6c757d;">
+													<strong>PENDING</strong>
+												</span>
 											</td>
-											<td><strong>{{ row.finance_status }}</strong></td>
+											<td>
+												<span v-if="row.finance_status == 0" >
+													<strong>NEW</strong>
+												</span>
+												<span v-else-if="row.finance_status == 1">
+													<strong>APPROVED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 2" >
+													<strong>SCHEDULED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 3" >
+													<strong>FOR CHECKING</strong>
+												</span>
+												<span v-else-if="row.finance_status == 4" >
+													<strong>DENIED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 5" >
+													<strong>RETURNED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 6" >
+													<strong>UPDATED</strong>
+												</span>
+												<span v-else-if="row.finance_status == 7" >
+													<strong>PENDING</strong>
+												</span>
+											</td>
 											<td>
 												<b-button @click="view(row)" variant="primary" size="sm">REVIEW</b-button>
 											</td>

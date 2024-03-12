@@ -12,10 +12,10 @@ export default {
     return {
       menuItems: menuItems,
       menuData: null,
+      roles:[],
     };
   },
   mounted: function () {
-    console.log(this.profile)
     if (document.getElementById("side-menu")) new MetisMenu("#side-menu");
     var links = document.getElementsByClassName("side-nav-link-ref");
     var matchingMenuItem = null;
@@ -104,7 +104,7 @@ export default {
         <li class="menu-title" v-if="item.isTitle && item.role == this.profile.role" :key="item.id">
           {{ $t(item.label) }}
         </li>
-        <li v-if="!item.isTitle && !item.isLayout && item.role == this.profile.role" :key="item.id">
+        <li v-if="!item.isTitle && !item.isLayout && item.role == this.profile.role || item.general == true" :key="item.id">
           <a
             v-if="hasItems(item)"
             href="javascript:void(0);"

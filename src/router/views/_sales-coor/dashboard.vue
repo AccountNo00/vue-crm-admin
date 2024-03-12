@@ -1,7 +1,9 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonData from "@/assets/json/salescoor-tb-dashboard.json"
+import Loader from '../../../components/widgets/loader.vue'
+import { mapActions } from "vuex";
+// import jsonData from "@/assets/json/salescoor-tb-dashboard.json"
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -18,12 +20,31 @@ export default {
     },
     components: {
         Layout,
+		Loader,
 		// Pagination
     },
     data() {
         return {
             title: "Dashboard",
-			data: jsonData,
+			data: [],
+			loading:false,
+			stats_data:{
+				arena:
+					{
+						fit:[],
+					},
+				ocbs:
+					{
+						fit:[],
+					}
+				,
+			},
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries: 50,
+				search:'',
+			},
             items: [
                 {
                     text: "Dashboards",
@@ -39,14 +60,50 @@ export default {
         };
     },
 	methods:{
+		...mapActions("salesCoor", {
+			getList: "dashboardList",
+			getStats: "dashboardStats",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
 		changePageReturn(pageNumberReturn) {
             this.pagesReturn = this.pages.map((_, index) => index === pageNumberReturn - 1);
-        }
+        },
+		async initStats() {
+			this.loading = true;
+			const data = await this.getStats();
+			this.loading = false;
+			this.stats_data.arena = data.arena
+			this.stats_data.ocbs = data.ocbs
+			this.stats_data.arena.fit = data.arena.fit
+			this.stats_data.ocbs.fit = data.ocbs.fit
+		},
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries,
+				// sort: "created_at",
+				order: "desc",
+			};
+			if(this.filterData.start_date){
+				pl['start_date'] = this.filterData.start_date;
+			}
+			if(this.filterData.end_date){
+				pl['end_date'] = this.filterData.end_date;
+			}
+			if(this.filterData.search){
+				pl['search'] = this.filterData.search;
+			}
+			this.loading = true;
+			const data = await this.getList(pl);
+			this.loading = false;
+			this.data.list = data.data.data;
+		},
 	},
     mounted() {
+		this.initList(1);
+		this.initStats();
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -57,19 +114,21 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
 		<div class="row">
 			<div class="d-flex">
 				<div class="col-3 p-2">
 					<div class="custom-danger custom-card">
 						<div class="d-flex">
 							<div class="p-4 mt-4" >
-								<b class="p-3 text-white" style="font-size:30px;">12</b>
+								<b class="p-3 text-white" style="font-size:30px;">{{this.stats_data.arena.activated_count + this.stats_data.ocbs.activated_count}}
+								</b>
 							</div>
 							<div class="p-4" style="display:flex;flex-direction: column;width:100%;">
 								<h4 class="text-white text-center">ACTIVATED</h4>
-								<span class="text-white font-size-16 mb-1">OCBS: <strong>10</strong></span>
+								<span class="text-white font-size-16 mb-1">OCBS: <strong>{{this.stats_data.ocbs.activated_count}}</strong></span>
 								<span class="progress-bar mt-1 mb-1"></span>
-								<span class="text-white font-size-16">ARENA: <strong>5</strong></span>
+								<span class="text-white font-size-16">ARENA: <strong>{{this.stats_data.arena.activated_count}}</strong></span>
 							</div>
 						</div>
 					</div>
@@ -80,13 +139,13 @@ export default {
 							<div class="col-5">
 								<div class="d-flex">
 									<div class="p-4 mt-4" >
-										<b class="p-3 text-white" style="font-size:30px;">9</b>
+										<b class="p-3 text-white" style="font-size:30px;">{{this.stats_data.arena.fit.fit_count + this.stats_data.ocbs.fit.fit_count}}</b>
 									</div>
 									<div class="p-4" style="display:flex;flex-direction: column;width:100%;">
 										<h4 class="text-white text-center">FIT</h4>
-										<span class="text-white font-size-16 mb-1">OCBS: <strong>8</strong></span>
+										<span class="text-white font-size-16 mb-1">OCBS: <strong>{{this.stats_data.ocbs.fit.fit_count}}</strong></span>
 										<span class="progress-bar mt-1 mb-1"></span>
-										<span class="text-white font-size-16">ARENA: <strong>1</strong></span>
+										<span class="text-white font-size-16">ARENA: <strong>{{this.stats_data.arena.fit.fit_count}}</strong></span>
 									</div>
 								</div>
 							</div>
@@ -95,12 +154,12 @@ export default {
 									<h4 class="text-center text-white" style="display:flex;flex-direction: column;width:100%;">OCBS</h4>
 									<div class="d-flex">
 										<div class="col-6" style="display:flex;flex-direction: column;">
-											<span class=" text-white font-size-16 mb-1">PC : <strong>4</strong></span>
-											<span class=" text-white font-size-16 mb-1">CBAND : <strong>3</strong></span>
-											<span class=" text-white font-size-16 mb-1">TRAINING : <strong>2</strong></span>
+											<span class=" text-white font-size-16 mb-1">PC : <strong>{{this.stats_data.ocbs.fit.pc}}</strong></span>
+											<span class=" text-white font-size-16 mb-1">CBAND : <strong>{{this.stats_data.ocbs.fit.cband}}</strong></span>
+											<span class=" text-white font-size-16 mb-1">TRAINING : <strong>{{this.stats_data.ocbs.fit.training}}</strong></span>
 										</div>
 										<div class="col-6">
-											<span class=" text-white font-size-16 mb-1"># of PC : <strong>16</strong></span>
+											<span class=" text-white font-size-16 mb-1"># of PC : <strong>{{this.stats_data.ocbs.fit.number_of_pc}}</strong></span>
 										</div>
 									</div>
 								</div>
@@ -110,12 +169,12 @@ export default {
 									<h4 class="text-center text-white" style="display:flex;flex-direction: column;width:100%;">ARENA</h4>
 									<div class="d-flex">
 										<div class="col-6" style="display:flex;flex-direction: column;">
-											<span class=" text-white font-size-16 mb-1">PC : <strong>0</strong></span>
-											<span class=" text-white font-size-16 mb-1">CBAND : <strong>0</strong></span>
-											<span class=" text-white font-size-16 mb-1">TRAINING : <strong>0</strong></span>
+											<span class=" text-white font-size-16 mb-1">PC : <strong>{{this.stats_data.arena.fit.pc}}</strong></span>
+											<span class=" text-white font-size-16 mb-1">CBAND : <strong>{{this.stats_data.arena.fit.cband}}</strong></span>
+											<span class=" text-white font-size-16 mb-1">TRAINING : <strong>{{this.stats_data.arena.fit.training}}</strong></span>
 										</div>
 										<div class="col-6">
-											<span class=" text-white font-size-16 mb-1"># of PC : <strong>0</strong></span>
+											<span class=" text-white font-size-16 mb-1"># of PC : <strong>{{this.stats_data.arena.fit.number_of_pc}}</strong></span>
 										</div>
 									</div>
 								</div>
@@ -129,13 +188,13 @@ export default {
 					<div class="custom-cyan custom-card-sm">
 						<div class="d-flex">
 							<div class="p-4 mt-4" >
-								<b class="p-3 text-white" style="font-size:30px;">12</b>
+								<b class="p-3 text-white" style="font-size:30px;">{{this.stats_data.arena.lead_count + this.stats_data.ocbs.lead_count}}</b>
 							</div>
 							<div class="p-4" style="display:flex;flex-direction: column;width:100%;">
 								<h4 class="text-white text-center">LEADS</h4>
-								<span class="text-white font-size-16 mb-1">OCBS: <strong>10</strong></span>
+								<span class="text-white font-size-16 mb-1">OCBS: <strong>{{this.stats_data.ocbs.lead_count}}</strong></span>
 								<span class="progress-bar mt-1 mb-1"></span>
-								<span class="text-white font-size-16">ARENA: <strong>5</strong></span>
+								<span class="text-white font-size-16">ARENA: <strong>{{this.stats_data.arena.lead_count}}</strong></span>
 							</div>
 						</div>
 					</div>
@@ -144,13 +203,13 @@ export default {
 					<div class="custom-red custom-card-sm">
 						<div class="d-flex">
 							<div class="p-4 mt-4" >
-								<b class="p-3 text-white" style="font-size:30px;">1</b>
+								<b class="p-3 text-white" style="font-size:30px;">{{this.stats_data.arena.denied_count + this.stats_data.ocbs.denied_count}}</b>
 							</div>
 							<div class="p-4" style="display:flex;flex-direction: column;width:100%;">
 								<h4 class="text-white text-center">DENIED</h4>
-								<span class="text-white font-size-16 mb-1">OCBS: <strong>1</strong></span>
+								<span class="text-white font-size-16 mb-1">OCBS: <strong>{{this.stats_data.ocbs.denied_count}}</strong></span>
 								<span class="progress-bar mt-1 mb-1"></span>
-								<span class="text-white font-size-16">ARENA: <strong>0</strong></span>
+								<span class="text-white font-size-16">ARENA: <strong>{{this.stats_data.arena.denied_count}}</strong></span>
 							</div>
 						</div>
 					</div>
@@ -159,13 +218,13 @@ export default {
 					<div class="bg-dark custom-card-sm">
 						<div class="d-flex">
 							<div class="p-4 mt-4" >
-								<b class="p-3 text-white" style="font-size:30px;">2</b>
+								<b class="p-3 text-white" style="font-size:30px;">{{this.stats_data.arena.closed_count + this.stats_data.ocbs.closed_count}}</b>
 							</div>
 							<div class="p-4" style="display:flex;flex-direction: column;width:100%;">
 								<h4 class="text-white text-center">CLOSED</h4>
-								<span class="text-white font-size-16 mb-1">OCBS: <strong>2</strong></span>
+								<span class="text-white font-size-16 mb-1">OCBS: <strong>{{this.stats_data.ocbs.closed_count}}</strong></span>
 								<span class="progress-bar mt-1 mb-1"></span>
-								<span class="text-white font-size-16">ARENA: <strong>0</strong></span>
+								<span class="text-white font-size-16">ARENA: <strong>{{this.stats_data.arena.closed_count}}</strong></span>
 							</div>
 						</div>
 					</div>
@@ -174,13 +233,13 @@ export default {
 					<div class="custom-warning custom-card-sm">
 						<div class="d-flex">
 							<div class="p-4 mt-4" >
-								<b class="p-3 text-white" style="font-size:30px;">2</b>
+								<b class="p-3 text-white" style="font-size:30px;">{{this.stats_data.arena.cancelled_count + this.stats_data.ocbs.cancelled_count}}</b>
 							</div>
 							<div class="p-4" style="display:flex;flex-direction: column;width:100%;">
 								<h4 class="text-white text-center">CANCELLED</h4>
-								<span class="text-white font-size-16 mb-1">OCBS: <strong>2</strong></span>
+								<span class="text-white font-size-16 mb-1">OCBS: <strong>{{this.stats_data.ocbs.cancelled_count}}</strong></span>
 								<span class="progress-bar mt-1 mb-1"></span>
-								<span class="text-white font-size-16">ARENA: <strong>0</strong></span>
+								<span class="text-white font-size-16">ARENA: <strong>{{this.stats_data.arena.cancelled_count}}</strong></span>
 							</div>
 						</div>
 					</div>
@@ -198,10 +257,10 @@ export default {
 								</div>
 								<div class="col-6 d-flex">
 									<label class="m-2 text-white">FROM</label>
-									<input type="date" class="form-control"/>
+									<input type="date" class="form-control" v-model="filterData.start_date"/>
 									<label class="m-2 text-white">TO</label>
-									<input type="date" class="form-control"/>
-									<b-button variant="dark" class="mx-2">Enter</b-button>
+									<input type="date" class="form-control" v-model="filterData.end_date"/>
+									<b-button variant="dark" class="mx-2" @click="initList(1)">Enter</b-button>
 								</div>
 							</div>
 						</div>
@@ -212,11 +271,11 @@ export default {
 										<div class="d-flex">
 											<div class="d-flex">
 												<label class="mt-2" style="width:200px;"><strong>Show entries:</strong></label>
-												<select class="mx-2 form-control">
+												<select class="mx-2 form-control" v-model="filterData.show_entries" @change="initList(1)">
 													<option value="10">10</option>
 													<option value="25">25</option>
 													<option value="50">50</option>
-													<option value="-1">All</option>
+													<option value="0">All</option>
 												</select>
 											</div>
 											<b-button variant="success mx-1">PRINT</b-button>
@@ -227,7 +286,7 @@ export default {
 									<div class="col-2 px-4 mt-2" style="float:right !important;">
 										<div class="d-flex">
 											<label class="m-2"><strong>SEARCH:</strong></label>
-											<input class="form-control"/>
+											<input class="form-control" v-model="this.filterData.search" @input="initList(1)"/>
 										</div>
 									</div>
 								</div>
@@ -246,14 +305,14 @@ export default {
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(row,index) in data" :key="index">
+										<tr v-for="(row,index) in this.data.list" :key="index">
 											<td>{{row.region}}</td>
 											<td>{{row.province}}</td>
-											<td>{{row.activated}}</td>
-											<td>{{row.fit}}</td>
-											<td>{{row.lead}}</td>
-											<td>{{row.denied}}</td>
-											<td>{{row.cancelled}}</td>
+											<td>{{row.activated_count}}</td>
+											<td>{{row.fit_count}}</td>
+											<td>{{row.lead_count}}</td>
+											<td>{{row.denied_count}}</td>
+											<td>{{row.cancelled_count}}</td>
 										</tr>
 										<tr>
 											<td></td>
