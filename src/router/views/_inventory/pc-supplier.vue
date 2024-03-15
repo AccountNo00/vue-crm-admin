@@ -2,6 +2,9 @@
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
 import jsonData from "@/assets/json/finance-report.json"
+import { mapActions } from "vuex";
+import Loader from '../../../components/widgets/loader.vue'
+import formatter from "../../../mixins/formatter";
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -16,8 +19,10 @@ export default {
             },
         ],
     },
+	mixins: [formatter],
     components: {
         Layout,
+		Loader
 		// Pagination
     },
     data() {
@@ -34,16 +39,46 @@ export default {
                     active: true,
                 },
             ],
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries: 50,
+				search:'',
+			},
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
         };
     },
 	methods:{
+		...mapActions("inventory", {
+			getList: "getPcList",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries,
+				order: "desc",
+			};
+			if(this.filterData.search){
+				pl['search'] = this.filterData.search;
+			}
+			if(this.filterData.start_date){
+				pl['start_date'] = this.filterData.start_date;
+			}
+			if(this.filterData.end_date){
+				pl['end_date'] = this.filterData.end_date;
+			}
+			this.loading = true;
+			const data = await this.getList(pl);
+			this.loading = false;
+			this.data.list = data.data;
+		},
 	},
     mounted() {
+		this.initList(1);
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -54,6 +89,7 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
         <div class="row">
 			<div class="col-12">
 				<div class="col-12">
@@ -65,10 +101,10 @@ export default {
 								</div>
 								<div class="col-6 d-flex">
 									<label class="m-2 text-white">FROM</label>
-									<input type="date" class="form-control"/>
+									<input type="date" class="form-control" v-model="filterData.start_date"/>
 									<label class="m-2 text-white">TO</label>
-									<input type="date" class="form-control"/>
-									<b-button variant="dark" class="mx-2">Enter</b-button>
+									<input type="date" class="form-control" v-model="filterData.end_date"/>
+									<b-button variant="dark" class="mx-2" @click="initList(1)">Enter</b-button>
 								</div>
 							</div>
 						</div>
@@ -79,11 +115,11 @@ export default {
 										<div class="d-flex">
 											<div class="d-flex">
 												<label class="mt-2" style="width:200px;"><strong>Show entries:</strong></label>
-												<select class="mx-2 form-control">
+												<select class="mx-2 form-control" v-model="filterData.show_entries" @change="initList(1)">
 													<option value="10">10</option>
 													<option value="25">25</option>
 													<option value="50">50</option>
-													<option value="-1">All</option>
+													<option value="0">All</option>
 												</select>
 											</div>
 											<b-button variant="success mx-1">PRINT</b-button>
@@ -94,7 +130,7 @@ export default {
 									<div class="col-2 px-4 mt-2" style="float:right !important;">
 										<div class="d-flex">
 											<label class="m-2"><strong>SEARCH:</strong></label>
-											<input class="form-control"/>
+											<input class="form-control" v-model="filterData.search" @input="initList(1)"/>
 										</div>
 									</div>
 								</div>
@@ -116,17 +152,42 @@ export default {
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(row,index) in data" :key="index">
-											<td>2023-12-28 10:59:32</td>
-											<td>OCBS-10002677</td>
-											<td>OCBS</td>
-											<td>BUSINESS SGBS NAME</td>
-											<td>Manila</td>
-											<td>Calamba</td>
-											<td>12</td>
-											<td>USER S COOR 1</td>
-											<td>COMPLETE</td>
-											<td>SIM</td>
+										<tr v-for="(data,index) in this.data.list" :key="index">
+											<td>{{`${dateOnly(data.pc_request.requested_date)} ${timeOnly(data.pc_request.requested_date)}`}}</td>
+											<td>{{data.id}}</td>
+											<td>{{data.application_type}}</td>
+											<td>{{data.business_name}}</td>
+											<td>{{data.business_address}}</td>
+											<td>{{data.pc_request.point_a_location}}</td>
+											<td>{{data.pc_request.kilometers + ' km'}}</td>
+											<td>{{data.encoder.full_name}}</td>
+											<td>
+												<span v-if="data.pc_request.status == 0" >
+													<strong>NEW</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 1">
+													<strong>APPROVED</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 2" >
+													<strong>SCHEDULED</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 3" >
+													<strong>FOR CHECKING</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 4" >
+													<strong>DENIED</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 5" >
+													<strong>RETURNED</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 6" >
+													<strong>UPDATED</strong>
+												</span>
+												<span v-else-if="data.pc_request.status == 7" >
+													<strong>PENDING</strong>
+												</span>
+											</td>
+											<td>{{data.pc_request.provider.company_name}}</td>
 										</tr>
 									</tbody>
 								</table>

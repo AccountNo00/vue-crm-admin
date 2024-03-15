@@ -1,8 +1,12 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonDataTab1 from "@/assets/json/ticket-tracker-1.json"
-import jsonDataTab2 from "@/assets/json/ticket-tracker-2.json"
+// import jsonDataTab1 from "@/assets/json/ticket-tracker-1.json"
+// import jsonDataTab2 from "@/assets/json/ticket-tracker-2.json"
+import { mapActions } from "vuex";
+import Loader from '../../../components/widgets/loader.vue'
+import formatter from "../../../mixins/formatter";
+// import Swal from "sweetalert2";
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -17,15 +21,17 @@ export default {
             },
         ],
     },
+	mixins: [formatter],
     components: {
         Layout,
+		Loader
 		// Pagination
     },
     data() {
         return {
             title: "Dashboard",
-			data: jsonDataTab1,
-			data_2: jsonDataTab2,
+			data: [],
+			data_cband: [],
 			tTrackerModal: false,
 			headerBgVariant: 'dark',
 			headerTextVariant: 'light',
@@ -44,7 +50,14 @@ export default {
                 },
             ],
 			row_data:{
-
+			},
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries_pc: 50,
+				show_entries_cband: 50,
+				search_pc:'',
+				search_cband:'',
 			},
 			tabs: [true, false],
 			isCollapsed: false,
@@ -57,6 +70,10 @@ export default {
         };
     },
 	methods:{
+		...mapActions("inventory", {
+			getPc: "getPcDashboardList",
+			getCband: "getCbandDashboardList",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
@@ -112,8 +129,38 @@ export default {
 				this.kiosCollapsed = false
 			}
 		},
+		async initPc(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries_pc,
+				order: "desc",
+			};
+			if(this.filterData.search_pc){
+				pl['search'] = this.filterData.search_pc;
+			}
+			this.loading = true;
+			const data = await this.getPc(pl);
+			this.loading = false;
+			this.data.list = data.data;
+		},
+		async initCband(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries_cband,
+				order: "desc",
+			};
+			if(this.filterData.search_cband){
+				pl['search'] = this.filterData.search_cband;
+			}
+			this.loading = true;
+			const data = await this.getCband(pl);
+			this.loading = false;
+			this.data_cband.list = data.data;
+		},
 	},
     mounted() {
+		this.initPc(1);
+		this.initCband(1);
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -124,6 +171,7 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
         <div class="row">
 			<div class="div-tabs">
 				<button :class="`${this.tabs[0] == true ? 'active-tab' : 'inactive-tab'}`"
@@ -138,7 +186,7 @@ export default {
 							<div class="d-flex">
 								<div class="d-flex">
 									<label class="mt-2" style="width:200px;"><strong>Show entries:</strong></label>
-									<select class="mx-2 form-control">
+									<select class="mx-2 form-control" v-model="filterData.show_entries_pc" @change="initPc(1)">
 										<option value="10">10</option>
 										<option value="25">25</option>
 										<option value="50">50</option>
@@ -153,7 +201,7 @@ export default {
 						<div class="col-2 px-4 mt-2" style="float:right !important;">
 							<div class="d-flex">
 								<label class="m-2"><strong>SEARCH:</strong></label>
-								<input class="form-control"/>
+								<input class="form-control" v-model="filterData.search_pc" @input="initPc(1)"/>
 							</div>
 						</div>
 					</div>
@@ -174,15 +222,40 @@ export default {
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="(row,index) in data" :key="index">
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
-									<td>SAMPLE DATA</td>
+								<tr v-for="(data,index) in this.data.list" :key="index">
+									<td>{{data.requested_date }}</td>
+									<td>{{data.application_id}}</td>
+									<td>{{data.application_type}}</td>
+									<td>{{data.business_name}}</td>
+									<td>{{data.requested_by}}</td>
+									<td>{{data.installed_by}}</td>
+									<td>{{data.provider}}</td>
+									<td>
+										<span v-if="data.status == 0" >
+											<strong>NEW</strong>
+										</span>
+										<span v-else-if="data.status == 1">
+											<strong>APPROVED</strong>
+										</span>
+										<span v-else-if="data.status == 2" >
+											<strong>SCHEDULED</strong>
+										</span>
+										<span v-else-if="data.status == 3" >
+											<strong>FOR CHECKING</strong>
+										</span>
+										<span v-else-if="data.status == 4" >
+											<strong>DENIED</strong>
+										</span>
+										<span v-else-if="data.status == 5" >
+											<strong>RETURNED</strong>
+										</span>
+										<span v-else-if="data.status == 6" >
+											<strong>UPDATED</strong>
+										</span>
+										<span v-else-if="data.status == 7" >
+											<strong>PENDING</strong>
+										</span>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -204,7 +277,7 @@ export default {
 							<div class="d-flex">
 								<div class="d-flex">
 									<label class="mt-2" style="width:200px;"><strong>Show entries:</strong></label>
-									<select class="mx-2 form-control">
+									<select class="mx-2 form-control" v-model="filterData.show_entries_cband" @change="initCband(1)">
 										<option value="10">10</option>
 										<option value="25">25</option>
 										<option value="50">50</option>
@@ -219,7 +292,7 @@ export default {
 						<div class="col-2 px-4 mt-2" style="float:right !important;">
 							<div class="d-flex">
 								<label class="m-2"><strong>SEARCH:</strong></label>
-								<input class="form-control"/>
+								<input class="form-control" v-model="filterData.search_cband" @input="initCband(1)"/>
 							</div>
 						</div>
 					</div>
@@ -232,22 +305,45 @@ export default {
 								<th>REFERENCE</th>
 								<th>APPLICATION TYPE</th>
 								<th>BUSINESS NAME</th>
-								<th>REQUESTED BY</th>
 								<th>INSTALLED BY</th>
 								<th>PROVIDER</th>
 								<th>STATUS</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="(row,index) in data" :key="index">
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
-								<td>SAMPLE DATA CBAND</td>
+							<tr v-for="(data,index) in this.data_cband.list" :key="index">
+								<td>{{data.request_date }}</td>
+								<td>{{data.application_id}}</td>
+								<td>{{data.application_type}}</td>
+								<td>{{data.business_name}}</td>
+								<td>{{data.installed_by}}</td>
+								<td>{{data.provider}}</td>
+								<td>
+									<span v-if="data.status == 0" >
+										<strong>NEW</strong>
+									</span>
+									<span v-else-if="data.status == 1">
+										<strong>APPROVED</strong>
+									</span>
+									<span v-else-if="data.status == 2" >
+										<strong>SCHEDULED</strong>
+									</span>
+									<span v-else-if="data.status == 3" >
+										<strong>FOR CHECKING</strong>
+									</span>
+									<span v-else-if="data.status == 4" >
+										<strong>DENIED</strong>
+									</span>
+									<span v-else-if="data.status == 5" >
+										<strong>RETURNED</strong>
+									</span>
+									<span v-else-if="data.status == 6" >
+										<strong>UPDATED</strong>
+									</span>
+									<span v-else-if="data.status == 7" >
+										<strong>PENDING</strong>
+									</span>
+								</td>
 							</tr>
 						</tbody>
 					</table>

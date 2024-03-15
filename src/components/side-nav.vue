@@ -103,10 +103,10 @@ export default {
     <!-- Left Menu Start -->
     <ul id="side-menu" class="metismenu list-unstyled">
       <template v-for="item in menuItems">
-        <li class="menu-title" v-if="item.isTitle " :key="item.id">
+        <li class="menu-title" v-if="item.isTitle && item.role == this.profile.role " :key="item.id">
           {{ $t(item.label) }}
         </li>
-        <li v-if="!item.isTitle && !item.isLayout" :key="item.id">
+        <li v-if="!item.isTitle && !item.isLayout && item.role == this.profile.role || item.general == true" :key="item.id">
           <a
             v-if="hasItems(item)"
             href="javascript:void(0);"
