@@ -1,7 +1,10 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonData from "@/assets/json/finance-report.json"
+// import jsonData from "@/assets/json/finance-report.json"
+import { mapActions } from "vuex";
+import Loader from '../../../components/widgets/loader.vue'
+import formatter from "../../../mixins/formatter";
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -16,14 +19,16 @@ export default {
             },
         ],
     },
+	mixins: [formatter],
     components: {
         Layout,
+		Loader
 		// Pagination
     },
     data() {
         return {
             title: "Report",
-			data: jsonData,
+			data: [],
             items: [
                 {
                     text: "Reports",
@@ -34,15 +39,25 @@ export default {
                     active: true,
                 },
             ],
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries: 50,
+				search:'',
+			},
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
 			keyboard_clicked: false,
 			mouse_clicked: false,
 			monitor_clicked: false,
 			system_unit_clicked: false,
+			loading:false,
         };
     },
 	methods:{
+		...mapActions("inventory", {
+			pcList: "getPcReportList",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
@@ -73,9 +88,24 @@ export default {
 			}else{
 				this.system_unit_clicked = false
 			}
-		}
+		},
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries,
+				order: "desc",
+			};
+			if(this.filterData.search){
+				pl['search'] = this.filterData.search;
+			}
+			this.loading = true;
+			const data = await this.pcList(pl);
+			this.loading = false;
+			this.data.list = data.data;
+		},
 	},
     mounted() {
+		this.initList(1)
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -86,6 +116,7 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
         <div class="row">
 			<div class="col-12">
 				<div class="col-12">
@@ -163,23 +194,23 @@ export default {
 											<th></th>
 											<th></th>
 											<th></th>
-											<th>27</th>
+											<th>1</th>
 											<th>0</th>
 										</tr>
-										<tr :style="keyboard_clicked == true ? '' : 'display:none'">
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
+										<tr v-for="data,index in this.data.list" :key="index"  :style="keyboard_clicked == true ? '' : 'display:none'">
+											<td v-if="data.item_name == 'keyboard'" >{{data.encoded_by}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.date_encoded}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.id}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.application_type}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.business_name}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.province}}</td>
+											<td v-if="data.item_name == 'keyboard'" ></td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.item_name}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.brand}}</td>
+											<td v-if="data.item_name == 'keyboard'" >{{data.serial_number}}</td>
+											<td v-if="data.item_name == 'keyboard'" ></td>
+											<td v-if="data.item_name == 'keyboard'" >1</td>
+											<td v-if="data.item_name == 'keyboard'" >0</td>
 										</tr>
 										<tr class="hover-pointer" @click="monitorClicker()" style="background: #edfaf8;">
 											<th>MONITOR</th>
@@ -197,19 +228,19 @@ export default {
 											<th>0</th>
 										</tr>
 										<tr :style="monitor_clicked == true ? '' : 'display:none'">
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.encoded_by}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.date_encoded}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.id}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.application_type}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.business_name}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.province}}</td>
+											<td v-if="data.item_name == 'monitor'" ></td>
+											<td v-if="data.item_name == 'monitor'" >{{data.item_name}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.brand}}</td>
+											<td v-if="data.item_name == 'monitor'" >{{data.serial_number}}</td>
+											<td v-if="data.item_name == 'monitor'" ></td>
+											<td v-if="data.item_name == 'monitor'" >1</td>
+											<td v-if="data.item_name == 'monitor'" >0</td>
 										</tr>
 										<tr class="hover-pointer" @click="mouseClicker()" style="background: #edfaf8;">
 											<th>MOUSE</th>
@@ -227,19 +258,19 @@ export default {
 											<th>0</th>
 										</tr>
 										<tr :style="mouse_clicked == true ? '' : 'display:none'">
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.encoded_by}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.date_encoded}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.id}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.application_type}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.business_name}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.province}}</td>
+											<td v-if="data.item_name == 'mouse'" ></td>
+											<td v-if="data.item_name == 'mouse'" >{{data.item_name}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.brand}}</td>
+											<td v-if="data.item_name == 'mouse'" >{{data.serial_number}}</td>
+											<td v-if="data.item_name == 'mouse'" ></td>
+											<td v-if="data.item_name == 'mouse'" >1</td>
+											<td v-if="data.item_name == 'mouse'" >0</td>
 										</tr>
 										<tr class="hover-pointer" @click="systemUnitClicker()" style="background: #edfaf8;">
 											<th>SYSTEM UNIT</th>
@@ -257,19 +288,19 @@ export default {
 											<th>0</th>
 										</tr>
 										<tr :style="system_unit_clicked == true ? '' : 'display:none'">
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
-											<td>1</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.encoded_by}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.date_encoded}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.id}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.application_type}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.business_name}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.province}}</td>
+											<td v-if="data.item_name == 'system unit'" ></td>
+											<td v-if="data.item_name == 'system unit'" >{{data.item_name}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.brand}}</td>
+											<td v-if="data.item_name == 'system unit'" >{{data.serial_number}}</td>
+											<td v-if="data.item_name == 'system unit'" ></td>
+											<td v-if="data.item_name == 'system unit'" >1</td>
+											<td v-if="data.item_name == 'system unit'" >0</td>
 										</tr>
 										<tr>
 											<td style="border:none"></td>

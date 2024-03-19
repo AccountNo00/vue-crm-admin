@@ -1215,7 +1215,7 @@ export const menuItems = [
         link: "/sales-manager/maps",
         role: [6],
     },
-    // GENERAL
+    // GENERAL 
     {
         id: 1,
         label: "All report",

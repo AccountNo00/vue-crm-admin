@@ -12,10 +12,10 @@ export const state = {
 };
 
 export const actions = {
-	getPcDashboardList({ rootGetters, dispatch },pl) {
+	getQueueList({ rootGetters, dispatch },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.get(`inventory/pc?` + new URLSearchParams(pl).toString(), {
+				.get(`application/training/queue?` + new URLSearchParams(pl).toString(), {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},
@@ -32,10 +32,10 @@ export const actions = {
 				});
 		});
 	},
-	getCbandDashboardList({ rootGetters, dispatch },pl) {
+	getScheduledList({ rootGetters, dispatch },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.get(`inventory/cband?` + new URLSearchParams(pl).toString(), {
+				.get(`application/training/scheduled?` + new URLSearchParams(pl).toString(), {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},
@@ -52,10 +52,50 @@ export const actions = {
 				});
 		});
 	},
-	getPcList({ rootGetters, dispatch },pl) {
+	getPendingList({ rootGetters, dispatch },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.get(`inventory/report/pc?` + new URLSearchParams(pl).toString(), {
+				.get(`application/training/pending/queue?` + new URLSearchParams(pl).toString(), {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data.data);
+					}
+				})
+				.catch(function (err) {
+					if (err.response.status == 401) {
+						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					}
+				});
+		});
+	},
+	getReports({ rootGetters, dispatch },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.get(`application/training/report?` + new URLSearchParams(pl).toString(), {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data.data);
+					}
+				})
+				.catch(function (err) {
+					if (err.response.status == 401) {
+						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					}
+				});
+		});
+	},
+	saveSchedule({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post(`application/training/schedule?`+ new URLSearchParams(pl).toString(), {}, {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},
@@ -66,16 +106,16 @@ export const actions = {
 					}
 				})
 				.catch(function (err) {
-					if (err.response.status == 401) {
-						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					if (err) {
+						resolve(err);
 					}
 				});
 		});
 	},
-	getCbandList({ rootGetters, dispatch },pl) {
+	returnQueueSchedule({ rootGetters },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.get(`inventory/report/video?`+ new URLSearchParams(pl).toString(), {
+				.post(`application/training/return?`+ new URLSearchParams(pl).toString(), {}, {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},
@@ -86,38 +126,40 @@ export const actions = {
 					}
 				})
 				.catch(function (err) {
-					if (err.response.status == 401) {
-						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					if (err) {
+						resolve(err);
 					}
 				});
 		});
 	},
-	getPriceList({ rootGetters, dispatch },pl) {
+	pendingQueueSchedule({ rootGetters },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.get(`inventory/list?`+ new URLSearchParams(pl).toString(), {
+				.post(`application/training/pending`,pl, {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
+						'Content-Type': 'application/json'
 					},
 				})
 				.then(function (res) {
 					if (res.status == 200) {
-						resolve(res.data.data);
+						resolve(res.data);
 					}
 				})
 				.catch(function (err) {
-					if (err.response.status == 401) {
-						dispatch("auth/logoutUser", {}, { root: true }).then(() => { });
+					if (err) {
+						resolve(err);
 					}
 				});
 		});
 	},
-	createItem({ rootGetters },pl) {
+	completeSchedule({ rootGetters },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.post(`inventory/create?`+ new URLSearchParams(pl).toString(), {}, {
+				.post(`application/training/approve`,pl, {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
+						'Content-Type': 'application/json'
 					},
 				})
 				.then(function (res) {
@@ -156,46 +198,6 @@ export const actions = {
 		return new Promise(function (resolve) {
 			$api
 				.delete(`inventory/delete?`+ new URLSearchParams(pl).toString(), {
-					headers: {
-						Authorization: rootGetters["auth/bearer_token"],
-					},
-				})
-				.then(function (res) {
-					if (res.status == 200) {
-						resolve(res.data);
-					}
-				})
-				.catch(function (err) {
-					if (err) {
-						resolve(err);
-					}
-				});
-		});
-	},
-	getPcReportList({ rootGetters },pl) {
-		return new Promise(function (resolve) {
-			$api
-				.get(`inventory/report/pc/items?` + new URLSearchParams(pl).toString(), {
-					headers: {
-						Authorization: rootGetters["auth/bearer_token"],
-					},
-				})
-				.then(function (res) {
-					if (res.status == 200) {
-						resolve(res.data);
-					}
-				})
-				.catch(function (err) {
-					if (err) {
-						resolve(err);
-					}
-				});
-		});
-	},
-	getVideoReportList({ rootGetters },pl) {
-		return new Promise(function (resolve) {
-			$api
-				.get(`inventory/report/video/items?` + new URLSearchParams(pl).toString(), {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},

@@ -1,7 +1,10 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonData from "@/assets/json/finance-report.json"
+// import jsonData from "@/assets/json/finance-report.json"
+import { mapActions } from "vuex";
+import Loader from '../../../components/widgets/loader.vue'
+import formatter from "../../../mixins/formatter";
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -16,14 +19,16 @@ export default {
             },
         ],
     },
+	mixins: [formatter],
     components: {
         Layout,
+		Loader
 		// Pagination
     },
     data() {
         return {
             title: "Report",
-			data: jsonData,
+			data: [],
             items: [
                 {
                     text: "Reports",
@@ -34,16 +39,41 @@ export default {
                     active: true,
                 },
             ],
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries: 50,
+				search:'',
+			},
+			loading:false,
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
         };
     },
 	methods:{
+		...mapActions("trainor", {
+			getList: "getReports",
+		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries,
+				order: "desc",
+			};
+			if(this.filterData.search){
+				pl['search'] = this.filterData.search;
+			}
+			this.loading = true;
+			const data = await this.getList(pl);
+			this.loading = false;
+			this.data.list = data.data;
+		},
 	},
     mounted() {
+		this.initList(1)
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -54,6 +84,7 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
         <div class="row">
 			<div class="col-12">
 				<div class="col-12">
@@ -79,7 +110,7 @@ export default {
 										<div class="d-flex">
 											<div class="d-flex">
 												<label class="mt-2" style="width:200px;"><strong>Show entries:</strong></label>
-												<select class="mx-2 form-control">
+												<select class="mx-2 form-control" v-model="this.filterData.show_entries" @change="initList(1)">
 													<option value="10">10</option>
 													<option value="25">25</option>
 													<option value="50">50</option>
@@ -94,7 +125,7 @@ export default {
 									<div class="col-2 px-4 mt-2" style="float:right !important;">
 										<div class="d-flex">
 											<label class="m-2"><strong>SEARCH:</strong></label>
-											<input class="form-control"/>
+											<input class="form-control" v-model="this.filterData.search" @input="initList(1)"/>
 										</div>
 									</div>
 								</div>
@@ -113,13 +144,38 @@ export default {
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(row,index) in data" :key="index">
-											<td>2023-12-28 10:59:32</td>
-											<td>OCBS-10002677</td>
-											<td>OCBS</td>
-											<td>BUSINESS SGBS NAME</td>
-											<td>User S Manager 1</td>
-											<td>COMPLETE</td>
+										<tr v-for="(data,index) in this.data.list" :key="index">
+											<td>{{`${dateOnly(data.request_date)} ${timeOnly(data.request_date)}`}}</td>
+											<td>{{data.application_id}}</td>
+											<td>{{ }}</td>
+											<td>{{data.application.business_name }}</td>
+											<td>{{data.application.encoder.full_name }}</td>
+											<td>
+												<span v-if="data.status == 0" >
+													<strong>NEW</strong>
+												</span>
+												<span v-else-if="data.status == 1">
+													<strong>APPROVED</strong>
+												</span>
+												<span v-else-if="data.status == 2" >
+													<strong>SCHEDULED</strong>
+												</span>
+												<span v-else-if="data.status == 3" >
+													<strong>FOR CHECKING</strong>
+												</span>
+												<span v-else-if="data.status == 4" >
+													<strong>DENIED</strong>
+												</span>
+												<span v-else-if="data.status == 5" >
+													<strong>RETURNED</strong>
+												</span>
+												<span v-else-if="data.status == 6" >
+													<strong>UPDATED</strong>
+												</span>
+												<span v-else-if="data.status == 7" >
+													<strong>PENDING</strong>
+												</span>
+											</td>
 											<td class="text-center">
 												<b-button @click="view(row)" variant="primary" size="sm">REVIEW</b-button>
 											</td>
