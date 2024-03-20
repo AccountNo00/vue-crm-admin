@@ -32,6 +32,8 @@ export default {
 			data_queue: [],
 			data_scheduled: [],
 			data_pending: [],
+			data_trainees: [],
+			trainers_data: [],
             items: [
                 {
                     text: "Dashboards",
@@ -90,6 +92,15 @@ export default {
 				contact_number: '',
 				role: '',
 			},
+			pl_edit_trainee:{
+				id: '',
+				full_name: '',
+				contact_number: '',
+				role: '',
+			},
+			edit:false,
+			edit_trainee: false,
+			edit_id: '',
 			application_id: '',
         };
     },
@@ -102,6 +113,11 @@ export default {
 			returnQueue: "returnQueueSchedule",
 			updatePendingQueue: "pendingQueueSchedule",
 			updateCompleteQueue: "completeSchedule",
+			traineeList: "traineesList",
+			addTrainee: "traineeAdd",
+			updateTrainee: "traineeUpdate",
+			deleteTrainee: "traineeDelete",
+			getTrainerList: "trainerList",
 		}),
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
@@ -256,20 +272,170 @@ export default {
 				}
 			}
 		},
-		addScheduledTrainees(){
-			const add_trainees = {
+		// addScheduledTrainees(){
+		// 	const add_trainees = {
+		// 		full_name: this.add_trainees.full_name,
+		// 		contact_number: this.add_trainees.contact_number,
+		// 		role: this.add_trainees.role
+		// 	}
+		// 	this.pl_scheduled.trainees.push(add_trainees);
+		// },
+		async getEdit(data){
+			this.edit_id = data.id
+			this.pl_edit_trainee.id = data.id; 
+			this.pl_edit_trainee.full_name = data.full_name; 
+			this.pl_edit_trainee.contact_number = data.contact_number; 
+			this.pl_edit_trainee.role = data.role; 
+		},
+		async createTrainee(){
+			const pl = {
+				application_id: this.application_id,
 				full_name: this.add_trainees.full_name,
 				contact_number: this.add_trainees.contact_number,
 				role: this.add_trainees.role
 			}
-			this.pl_scheduled.trainees.push(add_trainees);
+			const confirmed = await Swal.fire({
+				title: "Are you sure?",
+				html: `You want to add new Trainee?`,
+				type: "warning",
+				icon: "warning",
+				confirmButtonColor: "#556ee6",
+				showCancelButton: true,
+				padding: "2em",
+			}).then((result) => {
+				return result.isConfirmed;
+			});
+			if (confirmed) {
+				const success = await this.addTrainee(pl);
+				if (success.status == 200 || success.status == "success") {
+					Swal.fire({
+						title: "Successful",
+						html: `Trainee Successfully added`,
+						icon: "success",
+						type: "success",
+						showConfirmButton: false,
+					});
+					this.initTrainees(1);
+					this.resetTrainee();
+				} else {
+					Swal.fire({
+						title: "Failed",
+						html: `Failed to add new Trainee.`,
+						type: "error",
+						icon: "error",
+						confirmButtonColor: "#556ee6",
+						padding: "2em",
+					});
+				}
+			}
 		},
-
+		resetTrainee(){
+			this.add_trainees.full_name = ''
+			this.add_trainees.contact_number = ''
+			this.add_trainees.role = ''
+		},
+		async removeTrainee(data){
+			const pl = {
+				id: data.id,
+			}
+			const confirmed = await Swal.fire({
+				title: "Are you sure?",
+				html: `You want to remove this Trainee?`,
+				type: "warning",
+				icon: "warning",
+				confirmButtonColor: "#556ee6",
+				showCancelButton: true,
+				padding: "2em",
+			}).then((result) => {
+				return result.isConfirmed;
+			});
+			if (confirmed) {
+				const success = await this.deleteTrainee(pl);
+				if (success.status == 200 || success.status == "success") {
+					Swal.fire({
+						title: "Successful",
+						html: `Trainee Successfully Removed`,
+						icon: "success",
+						type: "success",
+						showConfirmButton: false,
+					});
+					this.initTrainees(1);
+				} else {
+					Swal.fire({
+						title: "Failed",
+						html: `Failed to remove this Trainee.`,
+						type: "error",
+						icon: "error",
+						confirmButtonColor: "#556ee6",
+						padding: "2em",
+					});
+				}
+			}
+		},
+		async editTrainee(data){
+			const pl = {
+				id: data.id
+			}
+			if(this.pl_edit_trainee.full_name){
+				pl['full_name'] = this.pl_edit_trainee.full_name
+			}
+			if(this.pl_edit_trainee.contact_number){
+				pl['contact_number'] = this.pl_edit_trainee.contact_number
+			}
+			if(this.pl_edit_trainee.role){
+				pl['role'] = this.pl_edit_trainee.role
+			}
+			const confirmed = await Swal.fire({
+				title: "Are you sure?",
+				html: `You want to update this Trainee?`,
+				type: "warning",
+				icon: "warning",
+				confirmButtonColor: "#556ee6",
+				showCancelButton: true,
+				padding: "2em",
+			}).then((result) => {
+				return result.isConfirmed;
+			});
+			if (confirmed) {
+				const success = await this.updateTrainee(pl);
+				if (success.status == 200 || success.status == "success") {
+					Swal.fire({
+						title: "Successful",
+						html: `Trainee updating Successful`,
+						icon: "success",
+						type: "success",
+						showConfirmButton: false,
+					});
+					this.edit_trainee = false;
+					this.initTrainees(1);
+				} else {
+					Swal.fire({
+						title: "Failed",
+						html: `Failed to update this Trainee.`,
+						type: "error",
+						icon: "error",
+						confirmButtonColor: "#556ee6",
+						padding: "2em",
+					});
+					this.edit_trainee = false;
+					this.initTrainees(1);
+				}
+			}
+		},
+		async initTrainees() {
+			var pl = {
+				application_id : this.application_id
+			};
+			this.loading = true;
+			const data = await this.traineeList(pl);
+			this.loading = false;
+			this.data_trainees.list = data.data;
+		},
 		async pendingScheduled(){
 			var pl ={
 				application_id: this.application_id,
 				pending_remarks: this.pl_scheduled.pending_remarks,
-				trainees: this.pl_scheduled.trainees,
+				// trainees: this.pl_scheduled.trainees,
 			}
 			const confirmed = await Swal.fire({
 				title: "Are you sure?",
@@ -312,7 +478,7 @@ export default {
 			var pl ={
 				application_id: this.application_id,
 				other_details: this.pl_scheduled.other_details,
-				trainees: this.pl_scheduled.trainees,
+				// trainees: this.pl_scheduled.trainees,
 			}
 			const confirmed = await Swal.fire({
 				title: "Are you sure?",
@@ -363,7 +529,7 @@ export default {
 			var pl ={
 				application_id: this.application_id,
 				pending_remarks: this.pl_pending.pending_remarks,
-				trainees: this.pl_pending.trainees,
+				// trainees: this.pl_pending.trainees,
 			}
 			const confirmed = await Swal.fire({
 				title: "Are you sure?",
@@ -406,7 +572,7 @@ export default {
 			var pl ={
 				application_id: this.application_id,
 				other_details: this.review_pending_data.other_details,
-				trainees: this.pl_scheduled.trainees,
+				// trainees: this.pl_scheduled.trainees,
 			}
 			const confirmed = await Swal.fire({
 				title: "Are you sure?",
@@ -445,11 +611,22 @@ export default {
 				}
 			}
 		},
+		async initTrainerList(p) {
+			var pl = {
+				page: p,
+				limit: 0,
+				order: "desc",
+			};
+			const data = await this.getTrainerList(pl);
+			this.trainers_data.list = data.data;
+			console.log(this.trainers_data.list)
+		},
 	},
     mounted() {
 		this.initQueue(1)
 		this.initScheduled(1)
 		this.initPending(1)
+		this.initTrainerList(1)
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -634,7 +811,7 @@ export default {
 											<td>{{data.application?.application_type}}</td>
 											<td>{{data.application?.business_name}}</td>
 											<td class="text-center">
-												<button class="btn btn-info btn-sm" @click="getDataScheduled(data),review_scheduled = true">Review</button>
+												<button class="btn btn-info btn-sm" @click="getDataScheduled(data),initTrainees(),review_scheduled = true">Review</button>
 											</td>
 										</tr>
 									</tbody>
@@ -746,7 +923,7 @@ export default {
 												</span>
 											</td>
 											<td class="text-center">
-												<button class="btn btn-info btn-sm" @click="getDataPending(data),review_pending = true">Review</button>
+												<button class="btn btn-info btn-sm" @click="getDataPending(data),initTrainees(),review_pending = true">Review</button>
 											</td>
 										</tr>
 									</tbody>
@@ -831,9 +1008,10 @@ export default {
 						</div>
 						<div class="col-12 mb-4">
 							<div class="col-12">
+							<!-- editing -->
 								<label style="font-weight: bolder;">Trainer in Charge</label>
 								<select class="form-control mb-3" v-model="pl_save.trainer_in_charge">
-									<option></option>
+									<option :value="data.id" v-for="data,index in this.trainers_data.list" :key="index">{{data.full_name}}</option>
 								</select>
 							</div>
 						</div>
@@ -899,7 +1077,7 @@ export default {
 									</div>
 									<div>
 										<label class="col-6 fw-bolder">Training in Charge:</label>
-										<span class="col-6">{{}}</span>
+										<span class="col-6">{{this.review_scheduled_data.trainer?.full_name}}</span>
 									</div>
 								</div>
 								<div class="col-6">
@@ -943,18 +1121,18 @@ export default {
 								<div class="row">
 									<div class="col-4">
 										<label class="fw-bolder">Full Name:</label>
-										<input placeholder="Enter Full Name" class="form-control" v-model="add_trainees.full_name"/>
+										<input placeholder="Enter Full Name" class="form-control" v-model="add_trainees.full_name" :disabled="!edit"/>
 									</div>
 									<div class="col-4">
 										<label class="fw-bolder">Contact Number:</label>
 										<div class="d-flex">
 											<h6 class="contact-label">+63</h6>
-											<input class="form-control" placeholder="Contact Number" v-model="add_trainees.contact_number"/>
+											<input class="form-control" placeholder="Contact Number" v-model="add_trainees.contact_number" :disabled="!edit"/>
 										</div>
 									</div>
 									<div class="col-3">
 										<label class="fw-bolder">Role:</label>
-										<select class="form-control" v-model="add_trainees.role">
+										<select class="form-control" v-model="add_trainees.role" :disabled="!edit">
 											<option>Teller</option>
 											<option>Cashier</option>
 											<option>Teller/Cashier</option>
@@ -963,26 +1141,65 @@ export default {
 										</select>
 									</div>
 									<div class="col-1">
-										<button class="btn btn-dark" style="margin-top: 37px;" @click="addScheduledTrainees()">ADD</button>
+										<button class="btn btn-dark" style="margin-top: 37px;" @click="createTrainee()" :hidden="!edit">ADD</button>
 									</div>
 								</div>
 								<div class="mt-4" style="font-size: 15px;">
 									<table class="table table-responsive custom-style">
 										<thead>
 											<tr class="bg-light">
-												<th style="width: 30% !important">Full Name</th>
-												<th style="width: 30% !important">Contact Number</th>
-												<th style="width: 30% !important">Role</th>
+												<th >Full Name</th>
+												<th >Contact Number</th>
+												<th >Role</th>
+												<th style="width: 20%;" v-if="edit">Action</th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr v-for="data,index in this.pl_scheduled.trainees" :key="index">
-												<td style="width: 30% !important">{{data.full_name}}</td>
-												<td style="width: 30% !important">{{data.contact_number}}</td>
-												<td style="width: 30% !important">{{data.role}}</td>
+											<tr v-for="data,index in this.data_trainees.list" :key="index">
+												<td >
+													<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder mx-2">FROM:</span>
+													<span >{{data.full_name}}</span>
+													<div class="d-flex mt-1">
+														<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder m-2" style="padding-right: 18px;">To:</span>
+														<input v-if="data.id == this.edit_id && edit_trainee" class="form-control" v-model="pl_edit_trainee.full_name" />
+													</div>
+												</td>
+												<td >
+													<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder mx-2">FROM:</span>
+													<span >{{data.contact_number}}</span>
+													<div class="d-flex mt-1">
+														<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder m-2" style="padding-right: 18px;">To:</span>
+														<input v-if="data.id == this.edit_id && edit_trainee" class="form-control" v-model="pl_edit_trainee.contact_number" />
+													</div>
+												</td>
+												<td >
+													<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder mx-2">FROM:</span>
+													<span >{{data.role}}</span>
+													<div class="d-flex mt-1">
+														<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder m-2" style="padding-right: 18px;">To:</span>
+														<select v-if="data.id == this.edit_id && edit_trainee" class="form-control" v-model="pl_edit_trainee.role">
+															<option>Teller</option>
+															<option>Cashier</option>
+															<option>Teller/Cashier</option>
+															<option>Operator</option>
+															<option>Supervisor</option>
+														</select>
+													</div>
+												</td>
+												<!-- editing -->
+												<td style="width: 20%;" v-if="edit" class="text-center">
+													<button class="mx-1 btn btn-warning btn-sm" v-if="edit_trainee == false" @click="getEdit(data),edit_trainee = true">Edit</button>
+													<button class="mx-1 btn btn-danger btn-sm" v-if="edit_trainee == false" @click="removeTrainee(data)">Delete</button>
+													<button class="mx-1 btn btn-success btn-sm" v-if="data.id == this.edit_id && edit_trainee" @click="editTrainee(data)">Update</button>
+													<button class="mx-1 btn btn-light btn-sm" v-if="data.id == this.edit_id && edit_trainee" @click="edit_trainee = false">Cancel</button>
+												</td>
 											</tr>
 										</tbody>
 									</table>
+									<div class="text-end">
+										<b-button class="mx-1" variant="warning" v-if="edit == false" @click="edit = true">EDIT</b-button>
+										<b-button class="mx-1" variant="danger" v-if="edit == true" @click="edit = false">CANCEL</b-button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -993,8 +1210,8 @@ export default {
 							</div>
 						</div>
 						<div class="text-end">
-							<b-button class="mx-1" variant="info" @click="pending_remarks_modal = true, review_scheduled = false">PENDING</b-button>
-							<b-button class="mx-1" variant="danger" @click="review_queue = false, completeSchedule()">COMPLETE</b-button>
+							<b-button class="mx-1" variant="warning" @click="pending_remarks_modal = true, review_scheduled = false">PENDING</b-button>
+							<b-button class="mx-1" variant="info" @click="review_queue = false, completeSchedule()">COMPLETE</b-button>
 						</div>
 					</div>
 				</div>
@@ -1044,7 +1261,7 @@ export default {
 									</div>
 									<div>
 										<label class="col-6 fw-bolder">Training in Charge:</label>
-										<span class="col-6">{{}}</span>
+										<span class="col-6">{{this.review_pending_data.trainer?.full_name}}</span>
 									</div>
 								</div>
 								<div class="col-6">
@@ -1083,7 +1300,7 @@ export default {
 							</div>
 						</div>
 						<hr>
-						<div class="col-12 mb-4" >
+						<!-- <div class="col-12 mb-4" >
 							<div class="card p-3">
 								<div class="row">
 									<div class="col-4">
@@ -1128,6 +1345,93 @@ export default {
 											</tr>
 										</tbody>
 									</table>
+								</div>
+							</div>
+						</div> -->
+						<div class="col-12 mb-4" >
+							<div class="card p-3">
+								<div class="row">
+									<div class="col-4">
+										<label class="fw-bolder">Full Name:</label>
+										<input placeholder="Enter Full Name" class="form-control" v-model="add_trainees.full_name" :disabled="!edit"/>
+									</div>
+									<div class="col-4">
+										<label class="fw-bolder">Contact Number:</label>
+										<div class="d-flex">
+											<h6 class="contact-label">+63</h6>
+											<input class="form-control" placeholder="Contact Number" v-model="add_trainees.contact_number" :disabled="!edit"/>
+										</div>
+									</div>
+									<div class="col-3">
+										<label class="fw-bolder">Role:</label>
+										<select class="form-control" v-model="add_trainees.role" :disabled="!edit">
+											<option>Teller</option>
+											<option>Cashier</option>
+											<option>Teller/Cashier</option>
+											<option>Operator</option>
+											<option>Supervisor</option>
+										</select>
+									</div>
+									<div class="col-1">
+										<button class="btn btn-dark" style="margin-top: 37px;" @click="createTrainee()" :hidden="!edit">ADD</button>
+									</div>
+								</div>
+								<div class="mt-4" style="font-size: 15px;">
+									<table class="table table-responsive custom-style">
+										<thead>
+											<tr class="bg-light">
+												<th >Full Name</th>
+												<th >Contact Number</th>
+												<th >Role</th>
+												<th style="width: 20%;" v-if="edit">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="data,index in this.data_trainees.list" :key="index">
+												<td >
+													<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder mx-2">FROM:</span>
+													<span >{{data.full_name}}</span>
+													<div class="d-flex mt-1">
+														<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder m-2" style="padding-right: 18px;">To:</span>
+														<input v-if="data.id == this.edit_id && edit_trainee" class="form-control" v-model="pl_edit_trainee.full_name" />
+													</div>
+												</td>
+												<td >
+													<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder mx-2">FROM:</span>
+													<span >{{data.contact_number}}</span>
+													<div class="d-flex mt-1">
+														<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder m-2" style="padding-right: 18px;">To:</span>
+														<input v-if="data.id == this.edit_id && edit_trainee" class="form-control" v-model="pl_edit_trainee.contact_number" />
+													</div>
+												</td>
+												<td >
+													<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder mx-2">FROM:</span>
+													<span >{{data.role}}</span>
+													<div class="d-flex mt-1">
+														<span v-if="data.id == this.edit_id && edit_trainee" class="fw-bolder m-2" style="padding-right: 18px;">To:</span>
+														<select v-if="data.id == this.edit_id && edit_trainee" class="form-control" v-model="pl_edit_trainee.role">
+															<option>Teller</option>
+															<option>Cashier</option>
+															<option>Teller/Cashier</option>
+															<option>Operator</option>
+															<option>Supervisor</option>
+														</select>
+													</div>
+												</td>
+												<!-- editing -->
+												<td style="width: 20%;" v-if="edit" class="text-center">
+													<button class="mx-1 btn btn-warning btn-sm" v-if="edit_trainee == false" @click="getEdit(data),edit_trainee = true">Edit</button>
+													<button class="mx-1 btn btn-danger btn-sm" v-if="edit_trainee == false" @click="removeTrainee(data)">Delete</button>
+													<button class="mx-1 btn btn-success btn-sm" v-if="data.id == this.edit_id && edit_trainee" @click="editTrainee(data)">Update</button>
+													<button class="mx-1 btn btn-light btn-sm" v-if="data.id == this.edit_id && edit_trainee" @click="edit_trainee = false">Cancel</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="text-end">
+										<b-button class="mx-1" variant="warning" v-if="edit == false" @click="edit = true">EDIT</b-button>
+										<b-button class="mx-1" variant="danger" v-if="edit == true" @click="edit = false">CANCEL</b-button>
+									</div>
 								</div>
 							</div>
 						</div>

@@ -254,10 +254,10 @@ export const actions = {
 				});
 		});
 	},
-	updateItem({ rootGetters },pl) {
+	traineesList({ rootGetters },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.post(`inventory/update?`+ new URLSearchParams(pl).toString(), {}, {
+				.get(`application/training/trainees/show?` + new URLSearchParams(pl).toString(), {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},
@@ -274,10 +274,50 @@ export const actions = {
 				});
 		});
 	},
-	deleteItem({ rootGetters },pl) {
+	traineeAdd({ rootGetters },pl) {
 		return new Promise(function (resolve) {
 			$api
-				.delete(`inventory/delete?`+ new URLSearchParams(pl).toString(), {
+				.post(`application/training/add-trainee`, pl, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
+					}
+				});
+		});
+	},
+	traineeUpdate({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post(`application/training/trainees/update`,pl, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
+					}
+				});
+		});
+	},
+	traineeDelete({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.delete(`application/training/trainees/delete?` + new URLSearchParams(pl).toString(), {
 					headers: {
 						Authorization: rootGetters["auth/bearer_token"],
 					},
