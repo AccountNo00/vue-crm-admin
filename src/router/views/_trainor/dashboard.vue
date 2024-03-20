@@ -58,6 +58,8 @@ export default {
 			review_queue:false,
 			review_scheduled:false,
 			review_pending:false,
+			pending_remarks_modal:false,
+			update_details_modal:false,
 			loading:false,
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
@@ -70,6 +72,13 @@ export default {
 				training_extend_date: '',
 			},
 			pl_scheduled:{
+				contact_number: '',
+				role: '',
+				remarks:'',
+				other_details:'',
+				trainees: [],
+			},
+			pl_pending:{
 				contact_number: '',
 				role: '',
 				remarks:'',
@@ -148,6 +157,10 @@ export default {
 		},
 		getDataScheduled(data){
 			this.review_scheduled_data = data
+			this.application_id = data.application_id
+		},
+		getDataPending(data){
+			this.review_pending_data = data
 			this.application_id = data.application_id
 		},
 		handleFileUpload(event) {
@@ -251,6 +264,7 @@ export default {
 			}
 			this.pl_scheduled.trainees.push(add_trainees);
 		},
+
 		async pendingScheduled(){
 			var pl ={
 				application_id: this.application_id,
@@ -278,7 +292,7 @@ export default {
 						type: "success",
 						showConfirmButton: false,
 					});
-					this.pending_remarks = false;
+					this.pending_remarks_modal = false;
 					this.initQueue(1);
 					this.initScheduled(1);
 					this.initPending(1);
@@ -322,6 +336,100 @@ export default {
 						showConfirmButton: false,
 					});
 					this.review_scheduled = false;
+					this.initQueue(1);
+					this.initScheduled(1);
+					this.initPending(1);
+				} else {
+					Swal.fire({
+						title: "Failed",
+						html: `Failed to complete schedule.`,
+						type: "error",
+						icon: "error",
+						confirmButtonColor: "#556ee6",
+						padding: "2em",
+					});
+				}
+			}
+		},
+		addPendingTrainees(){
+			const add_trainees = {
+				full_name: this.add_trainees.full_name,
+				contact_number: this.add_trainees.contact_number,
+				role: this.add_trainees.role
+			}
+			this.pl_pending.trainees.push(add_trainees);
+		},
+		async lastPendingScheduled(){
+			var pl ={
+				application_id: this.application_id,
+				pending_remarks: this.pl_pending.pending_remarks,
+				trainees: this.pl_pending.trainees,
+			}
+			const confirmed = await Swal.fire({
+				title: "Are you sure?",
+				html: `You want to update this schedule?`,
+				type: "warning",
+				icon: "warning",
+				confirmButtonColor: "#556ee6",
+				showCancelButton: true,
+				padding: "2em",
+			}).then((result) => {
+				return result.isConfirmed;
+			});
+			if (confirmed) {
+				const success = await this.updatePendingQueue(pl);
+				if (success.status == 200 || success.status == "success") {
+					Swal.fire({
+						title: "Successful",
+						html: `Updating Successful`,
+						icon: "success",
+						type: "success",
+						showConfirmButton: false,
+					});
+					this.pending_remarks_modal = false;
+					this.initQueue(1);
+					this.initScheduled(1);
+					this.initPending(1);
+				} else {
+					Swal.fire({
+						title: "Failed",
+						html: `Failed to update schedule.`,
+						type: "error",
+						icon: "error",
+						confirmButtonColor: "#556ee6",
+						padding: "2em",
+					});
+				}
+			}
+		},
+		async completePendingSchedule(){
+			var pl ={
+				application_id: this.application_id,
+				other_details: this.review_pending_data.other_details,
+				trainees: this.pl_scheduled.trainees,
+			}
+			const confirmed = await Swal.fire({
+				title: "Are you sure?",
+				html: `You want to complete this schedule?`,
+				type: "warning",
+				icon: "warning",
+				confirmButtonColor: "#556ee6",
+				showCancelButton: true,
+				padding: "2em",
+			}).then((result) => {
+				return result.isConfirmed;
+			});
+			if (confirmed) {
+				const success = await this.updateCompleteQueue(pl);
+				if (success.status == 200 || success.status == "success") {
+					Swal.fire({
+						title: "Successful",
+						html: `Complete Successful`,
+						icon: "success",
+						type: "success",
+						showConfirmButton: false,
+					});
+					this.review_pending = false;
 					this.initQueue(1);
 					this.initScheduled(1);
 					this.initPending(1);
@@ -885,13 +993,13 @@ export default {
 							</div>
 						</div>
 						<div class="text-end">
-							<b-button class="mx-1" variant="info" @click="pending_remarks = true, review_scheduled = false">PENDING</b-button>
+							<b-button class="mx-1" variant="info" @click="pending_remarks_modal = true, review_scheduled = false">PENDING</b-button>
 							<b-button class="mx-1" variant="danger" @click="review_queue = false, completeSchedule()">COMPLETE</b-button>
 						</div>
 					</div>
 				</div>
 			</b-modal>
-			<b-modal centered v-model="pending_remarks" title="PENDING" title-class="text-black font-18 text-white"
+			<b-modal centered v-model="pending_remarks_modal" title="PENDING" title-class="text-black font-18 text-white"
 				header-class="bg-dark" body-class="p-3" hide-footer @hidden="reset" size="xl">
 				<div class="col-12 mt-2" style="font-size: 20px;">
 					<div class="card-body" >
@@ -903,6 +1011,151 @@ export default {
 						</div>
 						<div class="text-end">
 							<b-button class="mx-1" variant="info" @click="pendingScheduled()">SAVE</b-button>
+						</div>
+					</div>
+				</div>
+			</b-modal>
+			<b-modal centered v-model="review_pending" title="SCHEDULED TRAINING" title-class="text-black font-18 text-white"
+				header-class="bg-dark" body-class="p-3" hide-footer @hidden="reset" size="xl">
+				<div class="col-12 mt-2" style="font-size: 20px;">
+					<div class="card-body" >
+						<div class="col-12 mb-4" >
+							<div class="row">
+								<div class="col-6">
+									<div>
+										<label class="col-6 fw-bolder">Application Type:</label>
+										<span class="col-6">{{this.review_pending_data.application?.application_type}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Business Name:</label>
+										<span class="col-6">{{this.review_pending_data.application?.business_name}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Contact Person:</label>
+										<span class="col-6">{{this.review_pending_data.application?.contact_person}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Contact Number:</label>
+										<span class="col-6">{{this.review_pending_data.application?.contact_number}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Number of Trainee:</label>
+										<span class="col-6">{{this.review_pending_data.number_of_trainees}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Training in Charge:</label>
+										<span class="col-6">{{}}</span>
+									</div>
+								</div>
+								<div class="col-6">
+									<div>
+										<label class="col-6 fw-bolder">Reference NUmber:</label>
+										<span class="col-6">{{this.review_pending_data.application_id}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Business Address:</label>
+										<span class="col-6">{{this.review_pending_data.application?.business_address}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Guarantor:</label>
+										<span class="col-6">{{this.review_pending_data.application?.guarantor}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Internet Speed:</label>
+										<span class="col-6">{{this.review_pending_data.internet_speed}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Accomodation:</label>
+										<span class="col-6">{{}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="col-12 mt-4 mb-4">
+							<div class="col-12">
+								<label style="font-weight: bolder;">Training Schedule</label>
+								<div class="row" style="font-size: 15px;">
+									<div class="col-4"><label>FROM</label><input class="form-control" type="date" v-model="this.review_pending_data.training_schedule_start" disabled/></div>
+									<div class="col-4"><label>TO</label><input class="form-control" type="date" v-model="this.review_pending_data.training_schedule_end" disabled/></div>
+									<div class="col-4"><label>Training Extend/Support</label><input class="form-control" type="date" v-model="this.review_pending_data.training_extend_date" disabled/></div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="col-12 mb-4" >
+							<div class="card p-3">
+								<div class="row">
+									<div class="col-4">
+										<label class="fw-bolder">Full Name:</label>
+										<input placeholder="Enter Full Name" class="form-control" v-model="add_trainees.full_name"/>
+									</div>
+									<div class="col-4">
+										<label class="fw-bolder">Contact Number:</label>
+										<div class="d-flex">
+											<h6 class="contact-label">+63</h6>
+											<input class="form-control" placeholder="Contact Number" v-model="add_trainees.contact_number"/>
+										</div>
+									</div>
+									<div class="col-3">
+										<label class="fw-bolder">Role:</label>
+										<select class="form-control" v-model="add_trainees.role">
+											<option>Teller</option>
+											<option>Cashier</option>
+											<option>Teller/Cashier</option>
+											<option>Operator</option>
+											<option>Supervisor</option>
+										</select>
+									</div>
+									<div class="col-1">
+										<button class="btn btn-dark" style="margin-top: 37px;" @click="addPendingTrainees()">ADD</button>
+									</div>
+								</div>
+								<div class="mt-4" style="font-size: 15px;">
+									<table class="table table-responsive custom-style">
+										<thead>
+											<tr class="bg-light">
+												<th style="width: 30% !important">Full Name</th>
+												<th style="width: 30% !important">Contact Number</th>
+												<th style="width: 30% !important">Role</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="data,index in this.pl_pending.trainees" :key="index">
+												<td style="width: 30% !important">{{data.full_name}}</td>
+												<td style="width: 30% !important">{{data.contact_number}}</td>
+												<td style="width: 30% !important">{{data.role}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 mb-4">
+							<div class="col-12">
+								<label style="font-weight: bolder;">Other Details</label>
+								<textarea class="form-control" rows="5" v-model="this.review_pending_data.other_details" ></textarea>
+							</div>
+						</div>
+						<div class="text-end">
+							<b-button class="mx-1" variant="info" @click="update_details_modal = true, review_pending = false">UPDATE</b-button>
+							<b-button class="mx-1" variant="danger" @click="completePendingSchedule()">COMPLETE</b-button>
+						</div>
+					</div>
+				</div>
+			</b-modal>
+			<b-modal centered v-model="update_details_modal" title="PENDING" title-class="text-black font-18 text-white"
+				header-class="bg-dark" body-class="p-3" hide-footer @hidden="reset" size="xl">
+				<div class="col-12 mt-2" style="font-size: 20px;">
+					<div class="card-body" >
+						<div class="col-12 mb-4">
+							<div class="col-12">
+								<label style="font-weight: bolder;">Please provide details</label>
+								<textarea class="form-control" rows="5" v-model="this.pl_pending.pending_remarks"></textarea>
+							</div>
+						</div>
+						<div class="text-end">
+							<b-button class="mx-1" variant="info" @click="lastPendingScheduled()">SAVE</b-button>
 						</div>
 					</div>
 				</div>

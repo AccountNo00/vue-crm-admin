@@ -869,10 +869,10 @@ export default [
     component: () => import("./views/_trainor/report"),
   },
   {
-    path: "/trainor/training-list",
-    name: "trainor-training-list",
+    path: "/trainor/trainer-list",
+    name: "trainor-trainer-list",
     meta: { authRequired: true },
-    component: () => import("./views/_trainor/training-list"),
+    component: () => import("./views/_trainor/trainer-list"),
   },
   
   {

@@ -1028,9 +1028,9 @@ export const menuItems = [
     },
     {
         id: 1,
-        label: "TRAINING LIST",
+        label: "TRAINER LIST",
         icon: "bx bx-circle",
-        link: "/trainor/training-list",
+        link: "/trainor/trainer-list",
         role: [5],
     },
     // SIM

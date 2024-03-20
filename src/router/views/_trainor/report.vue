@@ -45,7 +45,19 @@ export default {
 				show_entries: 50,
 				search:'',
 			},
+			review_data:[],
+			application_id: '',
+			pl:{
+				trainees: [],
+			},
+			add_trainees:{
+				full_name: '',
+				contact_number: '',
+				role: '',
+			},
 			loading:false,
+			review_modal:false,
+			edit: false,
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
         };
@@ -57,6 +69,18 @@ export default {
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
+		getData(data){
+			this.review_data = data
+			this.application_id = data.application_id
+		},
+		addTrainees(){
+			const add_trainees = {
+				full_name: this.add_trainees.full_name,
+				contact_number: this.add_trainees.contact_number,
+				role: this.add_trainees.role
+			}
+			this.pl.trainees.push(add_trainees);
+		},
 		async initList(p) {
 			var pl = {
 				page: p,
@@ -147,7 +171,7 @@ export default {
 										<tr v-for="(data,index) in this.data.list" :key="index">
 											<td>{{`${dateOnly(data.request_date)} ${timeOnly(data.request_date)}`}}</td>
 											<td>{{data.application_id}}</td>
-											<td>{{ }}</td>
+											<td>{{data.application?.application_type}}</td>
 											<td>{{data.application.business_name }}</td>
 											<td>{{data.application.encoder.full_name }}</td>
 											<td>
@@ -177,7 +201,7 @@ export default {
 												</span>
 											</td>
 											<td class="text-center">
-												<b-button @click="view(row)" variant="primary" size="sm">REVIEW</b-button>
+												<b-button @click="getData(data),review_modal = true" variant="primary" size="sm">REVIEW</b-button>
 											</td>
 										</tr>
 									</tbody>
@@ -195,11 +219,157 @@ export default {
 					</div>
 				</div>
 			</div>
+			<!-- MODALS -->
+			<b-modal centered v-model="review_modal" title="SCHEDULED TRAINING" title-class="text-black font-18 text-white"
+				header-class="bg-dark" body-class="p-3" hide-footer @hidden="reset" size="xl">
+				<div class="col-12 mt-2" style="font-size: 20px;">
+					<div class="card-body" >
+						<div class="col-12 mb-4" >
+							<div class="row">
+								<div class="col-6">
+									<div>
+										<label class="col-6 fw-bolder">Application Type:</label>
+										<span class="col-6">{{this.review_data.application?.application_type}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Business Name:</label>
+										<span class="col-6">{{this.review_data.application?.business_name}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Contact Person:</label>
+										<span class="col-6">{{this.review_data.application?.contact_person}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Contact Number:</label>
+										<span class="col-6">{{this.review_data.application?.contact_number}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Number of Trainee:</label>
+										<span class="col-6">{{this.review_data.number_of_trainees}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Training Admin:</label>
+										<span class="col-6">{{}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Training in Charge:</label>
+										<span class="col-6">{{}}</span>
+									</div>
+								</div>
+								<div class="col-6">
+									<div>
+										<label class="col-6 fw-bolder">Reference NUmber:</label>
+										<span class="col-6">{{this.review_data.application_id}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Business Address:</label>
+										<span class="col-6">{{this.review_data.application?.business_address}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Guarantor:</label>
+										<span class="col-6">{{this.review_data.application?.guarantor}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Internet Speed:</label>
+										<span class="col-6">{{this.review_data.internet_speed}}</span>
+									</div>
+									<div>
+										<label class="col-6 fw-bolder">Accomodation:</label>
+										<span class="col-6">{{}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="col-12 mt-4 mb-4">
+							<div class="col-12">
+								<label style="font-weight: bolder;">Training Schedule</label>
+								<div class="row" style="font-size: 15px;">
+									<div class="col-4"><label>FROM</label><input class="form-control" type="date" v-model="this.review_data.training_schedule_start" disabled/></div>
+									<div class="col-4"><label>TO</label><input class="form-control" type="date" v-model="this.review_data.training_schedule_end" disabled/></div>
+									<div class="col-4"><label>Training Extend/Support</label><input class="form-control" type="date" v-model="this.review_data.training_extend_date" disabled/></div>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="col-12 mb-4" >
+							<div class="card p-3">
+								<div class="row">
+									<div class="col-4">
+										<label class="fw-bolder">Full Name:</label>
+										<input placeholder="Enter Full Name" class="form-control" v-model="add_trainees.full_name" :disabled="!edit"/>
+									</div>
+									<div class="col-4">
+										<label class="fw-bolder">Contact Number:</label>
+										<div class="d-flex">
+											<h6 class="contact-label">+63</h6>
+											<input class="form-control" placeholder="Contact Number" v-model="add_trainees.contact_number" :disabled="!edit"/>
+										</div>
+									</div>
+									<div class="col-3">
+										<label class="fw-bolder">Role:</label>
+										<select class="form-control" v-model="add_trainees.role" :disabled="!edit">
+											<option>Teller</option>
+											<option>Cashier</option>
+											<option>Teller/Cashier</option>
+											<option>Operator</option>
+											<option>Supervisor</option>
+										</select>
+									</div>
+									<div class="col-1">
+										<button class="btn btn-dark" style="margin-top: 37px;" @click="addTrainees()" :hidden="!edit">ADD</button>
+									</div>
+								</div>
+								<div class="mt-4" style="font-size: 15px;">
+									<table class="table table-responsive custom-style">
+										<thead>
+											<tr class="bg-light">
+												<th style="width: 30% !important">Full Name</th>
+												<th style="width: 30% !important">Contact Number</th>
+												<th style="width: 30% !important">Role</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="data,index in this.pl.trainees" :key="index">
+												<td style="width: 30% !important">{{data.full_name}}</td>
+												<td style="width: 30% !important">{{data.contact_number}}</td>
+												<td style="width: 30% !important">{{data.role}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 mb-4">
+							<div class="col-12">
+								<label style="font-weight: bolder;">Other Details</label>
+								<textarea class="form-control" rows="5" v-model="this.review_data.other_details" disabled></textarea>
+							</div>
+						</div>
+						<div class="text-end">
+							<b-button class="mx-1" variant="warning" v-if="edit == false" @click="edit = true">EDIT</b-button>
+							<b-button class="mx-1" variant="info" v-if="edit == true" @click="completePendingSchedule()">SAVE</b-button>
+							<b-button class="mx-1" variant="danger" v-if="edit == true" @click="edit = false">CANCEL</b-button>
+						</div>
+					</div>
+				</div>
+			</b-modal>
 			<!-- <Pagination/> -->
 		</div>
     </Layout>
 </template>
 <style scoped>
+.contact-label{
+	background: rgb(233, 236, 239);
+	border-radius: 5px 0 0 5px;
+	width:60px;
+	margin:0;
+	margin-right: -5px;
+	padding:8px;
+	border: 1px solid rgb(194, 194, 194);
+	align-items: center;
+	text-align: center;
+}
 .pagination > button{
 	border:none;
 	padding:5px 15px;

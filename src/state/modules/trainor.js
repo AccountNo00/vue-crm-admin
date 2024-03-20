@@ -174,6 +174,86 @@ export const actions = {
 				});
 		});
 	},
+	trainerList({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.get(`trainer/show?` + new URLSearchParams(pl).toString(), {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
+					}
+				});
+		});
+	},
+	trainerCreate({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post(`trainer/create`, pl, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
+					}
+				});
+		});
+	},
+	trainerUpdate({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.post(`trainer/update`, pl, {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
+					}
+				});
+		});
+	},
+	trainerDelete({ rootGetters },pl) {
+		return new Promise(function (resolve) {
+			$api
+				.delete(`trainer/delete?` + new URLSearchParams(pl).toString(), {
+					headers: {
+						Authorization: rootGetters["auth/bearer_token"],
+					},
+				})
+				.then(function (res) {
+					if (res.status == 200) {
+						resolve(res.data);
+					}
+				})
+				.catch(function (err) {
+					if (err) {
+						resolve(err);
+					}
+				});
+		});
+	},
 	updateItem({ rootGetters },pl) {
 		return new Promise(function (resolve) {
 			$api
