@@ -1,7 +1,10 @@
 <script>
 import Layout from "../../layouts/main";
 import appConfig from "@/app.config";
-import jsonData from "@/assets/json/finance-report.json"
+// import jsonData from "@/assets/json/finance-report.json"
+import { mapActions } from "vuex";
+import Loader from '../../../components/widgets/loader.vue'
+import formatter from "../../../mixins/formatter";
 // import Pagination from "../../../components/pagination.vue"
 /**
  * Dashboard Component
@@ -16,14 +19,15 @@ export default {
             },
         ],
     },
+	mixins: [formatter],
     components: {
-        Layout,
+        Layout,Loader
 		// Pagination
     },
     data() {
         return {
             title: "Report",
-			data: jsonData,
+			data: [],
             items: [
                 {
                     text: "Reports",
@@ -34,16 +38,42 @@ export default {
                     active: true,
                 },
             ],
+			filterData:{
+				start_date:'',
+				end_date:'',
+				show_entries: 0,
+				search:'',
+			},
+			loading:false,
 			pages:[true,false,false],
 			pagesReturn:[true,false,false],
         };
     },
 	methods:{
+		...mapActions("sim", {
+			getPriceList: "priceList",
+		}),
+		async initList(p) {
+			var pl = {
+				page: p,
+				limit:this.filterData.show_entries,
+				order: "desc",
+				category: 1
+			};
+			if(this.filterData.search){
+				pl['search'] = this.filterData.search;
+			}
+			this.loading = true;
+			const data = await this.getPriceList(pl);
+			this.loading = false;
+			this.data.list = data.data;
+		},
 		changePage(pageNumber) {
             this.pages = this.pages.map((_, index) => index === pageNumber - 1);
         },
 	},
     mounted() {
+		this.initList(1);
         // setTimeout(() => {
         //   this.showModal = true;
         // }, 1500);
@@ -54,6 +84,7 @@ export default {
 <template>
     <Layout>
         <PageHeader :title="title" :items="items" />
+		<Loader v-if="loading == true"/>
         <div class="row">
 			<div class="col-12">
 				<div class="col-12">
@@ -109,21 +140,21 @@ export default {
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(row,index) in data" :key="index">
-											<td>rj45</td>
-											<td>120</td>
-											<td>SAMPLE</td>
+										<tr v-for="(data,index) in this.data.list" :key="index">
+											<td>{{data.item_name}}</td>
+											<td>{{data.price}}</td>
+											<td>{{data.remarks}}</td>
 										</tr>
 									</tbody>
 								</table>
-								<div class="d-flex">
+								<!-- <div class="d-flex">
 									<span style="width:90%">Showing 1 to 20 of 120 entries</span>
 									<div class="d-flex pagination">
 										<button :class="`${this.pages[0] == true ? 'bg-primary text-white' : 'inactive-page'}`" @click="changePage(1)">1</button>
 										<button :class="`${this.pages[1] == true ? 'bg-primary text-white' : 'inactive-page'}`" @click="changePage(2)">2</button>
 										<button :class="`${this.pages[2] == true ? 'bg-primary text-white' : 'inactive-page'}`" @click="changePage(3)">3</button>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>

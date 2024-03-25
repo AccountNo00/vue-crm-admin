@@ -4,6 +4,7 @@ import $api from "../api";
 export const state = {
     token: $cookies.get("token"),
     role: $cookies.get("role"),
+    password: '',
 }
 
 export const mutations = {
@@ -12,6 +13,7 @@ export const mutations = {
         var role = `${data.role}`;
         state.token = token;
         state.role = role;
+        state.password = data.password;
         $cookies.set("token", token);
         $cookies.set("role", role);
         router.replace({ path: '/' }).catch(() => {});
@@ -40,6 +42,7 @@ export const getters = {
             username: state.profile_token,
             id: state.user_token,
             role: state.role,
+            password: state.password,
         };
     },
 
@@ -55,6 +58,7 @@ export const actions = {
 					},
 				})
 				.then(function (res) {
+					console.log(res)
 					if (res.status == 200) {
                         commit("setToken", res.data.data);
                         // commit("setProfile", res.data);
